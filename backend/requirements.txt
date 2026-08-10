@@ -1,5 +1,6 @@
 asgiref==3.12.1
 django==6.1
+djangorestframework==3.18.0
 et-xmlfile==2.0.0
 numpy==2.5.2
 openpyxl==3.1.5
