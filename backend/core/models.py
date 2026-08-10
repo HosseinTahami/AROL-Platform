@@ -14,6 +14,8 @@ class User(AbstractUser):
         (VISIBILITY_COMMERCIAL, "Commercial"),
     ]
 
+    user_id = models.CharField(max_length=64, unique=True, null=True, blank=True)
+
     company = models.ForeignKey(
         "Company",
         on_delete=models.CASCADE,
@@ -112,7 +114,7 @@ class Machine(models.Model):
     software_version = models.CharField(max_length=64, blank=True)
 
     def __str__(self):
-        return f"{self.serial_num} | {self.machine_id}"
+        return f"{self.serial_number} | {self.machine_id}"
 
 
 
