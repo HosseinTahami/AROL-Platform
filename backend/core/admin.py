@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import Company, User
+from . import models
 
-admin.site.register(Company)
-admin.site.register(User, UserAdmin)
+admin.site.register(models.Company)
+admin.site.register(models.User, UserAdmin)
+admin.site.register(models.MachineModel)
+admin.site.register(models.Machine)
