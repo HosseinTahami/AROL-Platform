@@ -278,3 +278,168 @@ class TelemetrySnapshot(models.Model):
 
     def __str__(self):
         return f"{self.machine_id} ---> {self.timestamp}"
+
+
+class Quote(models.Model):
+    quote_id = models.CharField(max_length=64, primary_key=True)
+    company = models.ForeignKey(
+        "Company",
+        on_delete=models.CASCADE,
+        related_name="quotes"
+    )
+
+    currency = models.CharField(max_length=8)
+    created_at = models.DateField(null=True, blank=True)
+    valid_until = models.DateField(null=True, blank=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.quote_id} | {self.company_id}"
+
+class QuoteRevision(models.Model):
+
+    STATUS_DRAFT = "Draft"
+    STATUS_SUBMITTED = "Submitted"
+    STATUS_SUPERSEDED = "Superseded"
+    STATUS_APPROVED = "Approved"
+    STATUS_REJECTED = "Rejected"
+    STATUS_EXPIRED = "Expired"
+    REVISION_STATUS_CHOICES = [
+        (STATUS_DRAFT, "Draft"),
+        (STATUS_SUBMITTED, "Submitted"),
+        (STATUS_SUPERSEDED, "Superseded"),
+        (STATUS_APPROVED, "Approved"),
+        (STATUS_REJECTED, "Rejected"),
+        (STATUS_EXPIRED, "Expired"),
+    ]
+
+    quote_revision_id = models.CharField(
+        max_length=64,
+        primary_key=True
+    )
+
+    quote = models.ForeignKey(
+        "Quote",
+        on_delete=models.CASCADE,
+        related_name="revisions"
+    )
+
+    revision_number = models.IntegerField()
+
+    revision_status = models.CharField(
+        max_length=16,
+        choices=REVISION_STATUS_CHOICES
+    )
+
+    issued_at = models.DateField(null=True, blank=True)
+    discount_rate = models.FloatField(default=0)
+    change_summary = models.TextField(blank=True)
+
+
+    def __str__(self):
+        return f"{self.quote_id} rev {self.revision_number} | {self.revision_status}"
+
+
+class QuoteLine(models.Model):
+
+    quote_line_id = models.CharField(max_length=64, primary_key=True)
+    quote_revision = models.ForeignKey(
+        "QuoteRevision",
+        on_delete=models.CASCADE,
+        related_name="lines",
+    )
+
+    machine = models.ForeignKey(
+        "Machine",
+        on_delete=models.SET_NULL,
+        related_name="quote_lines",
+        null=True,
+        blank=True,
+    )
+
+    price = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.quote_line_id} | {self.quote_revision_id}s"
+
+
+class Order(models.Model):
+
+
+    ORDER_CONFIRMED = "Confirmed"
+    ORDER_IN_PRODUCTION = "In production"
+    ORDER_DELIVERED = "Delivered"
+    ORDER_CLOSED = "Closed"
+    ORDER_STATUS_CHOICES = [
+        (ORDER_CONFIRMED, "Confirmed"),
+        (ORDER_IN_PRODUCTION, "In production"),
+        (ORDER_DELIVERED, "Delivered"),
+        (ORDER_CLOSED, "Closed"),
+    ]
+
+    SHIPMENT_IN_PRODUCTION = "In production"
+    SHIPMENT_READY = "Ready for shipment"
+    SHIPMENT_DELIVERED = "Delivered"
+    SHIPMENT_INSTALLED = "Installed"
+    SHIPMENT_STATUS_CHOICES = [
+        (SHIPMENT_IN_PRODUCTION, "In production"),
+        (SHIPMENT_READY, "Ready for shipment"),
+        (SHIPMENT_DELIVERED, "Delivered"),
+        (SHIPMENT_INSTALLED, "Installed"),
+    ]
+
+
+    order_id = models.CharField(max_length=64, primary_key=True)
+    quote = models.ForeignKey(
+        "Quote",
+        on_delete=models.PROTECT,
+        related_name="orders"
+    )
+
+    company = models.ForeignKey(
+        "Company",
+        on_delete=models.CASCADE,
+        related_name="orders"
+    )
+
+    order_status = models.CharField(max_length=16, choices=ORDER_STATUS_CHOICES)
+    order_date = models.DateField(null=True, blank=True)
+    expected_delivery_date = models.DateField(null=True, blank=True)
+    shipment_status = models.CharField(
+        max_length=20,
+        choices=SHIPMENT_STATUS_CHOICES
+    )
+
+    currency = models.CharField(max_length=8)
+    notes = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.order_id} | {self.order_status}"
+
+
+class OrderLine(models.Model):
+
+    FULFILLMENT_MANUFACTURING = "Manufacturing"
+    FULFILLMENT_READY = "Ready for shipment"
+    FULFILLMENT_DELIVERED = "Delivered"
+    FULFILLMENT_STATUS_CHOICES = [
+        (FULFILLMENT_MANUFACTURING, "Manufacturing"),
+        (FULFILLMENT_READY, "Ready for shipment"),
+        (FULFILLMENT_DELIVERED, "Delivered"),
+    ]
+
+    order_line_id = models.CharField(max_length=64, primary_key=True)
+    order = models.ForeignKey(
+        "Order",
+        on_delete=models.CASCADE,
+        related_name="lines"
+    )
+
+    fulfillment_status = models.CharField(
+        max_length=20,
+        choices=FULFILLMENT_STATUS_CHOICES
+    )
+
+    def __str__(self):
+        return f"{self.order_line_id} | {self.fulfillment_status}"
