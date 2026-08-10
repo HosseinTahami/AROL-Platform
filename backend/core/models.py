@@ -113,3 +113,168 @@ class Machine(models.Model):
 
     def __str__(self):
         return f"{self.serial_num} | {self.machine_id}"
+
+
+
+class Alarm(models.Model):
+
+    SEVERITY_CRITICAL = "Critical"
+    SEVERITY_HIGH = "High"
+    SEVERITY_MEDIUM = "Medium"
+    SEVERITY_LOW = "Low"
+    SEVERITY_CHOICES = [
+        (SEVERITY_CRITICAL, "Critical"),
+        (SEVERITY_HIGH, "High"),
+        (SEVERITY_MEDIUM, "Medium"),
+        (SEVERITY_LOW, "Low"),
+    ]
+
+
+    STATUS_OPEN = "Open"
+    STATUS_ACKNOWLEDGED = "Acknowledged"
+    STATUS_RESOLVED = "Resolved"
+    STATUS_CHOICES = [
+        (STATUS_OPEN, "Open"),
+        (STATUS_ACKNOWLEDGED, "Acknowledged"),
+        (STATUS_RESOLVED, "Resolved"),
+    ]
+
+    alarm_id = models.CharField(max_length=64, primary_key=True)
+    machine = models.ForeignKey(
+        "Machine",
+        on_delete=models.CASCADE,
+        related_name="alarms"
+    )
+
+
+    timestamp = models.DateTimeField()
+    alarm_code = models.CharField(max_length=64)
+    severity = models.CharField(max_length=16, choices=SEVERITY_CHOICES)
+    alarm_status = models.CharField(max_length=16, choices=STATUS_CHOICES)
+
+    def __str__(self):
+        return f"{self.alarm_code} from {self.machine_id}"
+
+
+class MaintenanceTicket(models.Model):
+
+    TYPE_REMOTE = "Remote troubleshooting"
+    TYPE_ONSITE = "On-site service"
+    TYPE_SCHEDULED = "Scheduled maintenance"
+    TYPE_OVERHAUL = "Overhaul"
+    TYPE_SIZE_CHANGE = "Size change assistance"
+    TYPE_SPARE_PARTS = "Spare parts request"
+
+    TYPE_CHOICES = [
+        (TYPE_REMOTE, "Remote Troubleshooting"),
+        (TYPE_ONSITE, "On-site Service"),
+        (TYPE_SPARE_PARTS, "Spare Parts Request"),
+        (TYPE_SCHEDULED, "Scheduled Maintenance"),
+        (TYPE_OVERHAUL, "Overhaul"),
+        (TYPE_SIZE_CHANGE, "Size Change Assistance"),
+    ]
+
+
+
+    STATUS_OPEN = "Open"
+    STATUS_IN_PROGRESS = "In progress"
+    STATUS_WAITING_PARTS = "Waiting for parts"
+    STATUS_RESOLVED = "Resolved"
+    STATUS_CLOSED = "Closed"
+    STATUS_CHOICES = [
+        (STATUS_OPEN, "Open"),
+        (STATUS_IN_PROGRESS, "In progress"),
+        (STATUS_WAITING_PARTS, "Waiting for parts"),
+        (STATUS_RESOLVED, "Resolved"),
+        (STATUS_CLOSED, "Closed"),
+    ]
+
+
+    PRIORITY_CRITICAL = "Critical"
+    PRIORITY_HIGH = "High"
+    PRIORITY_MEDIUM = "Medium"
+    PRIORITY_LOW = "Low"
+    PRIORITY_CHOICES = [
+        (PRIORITY_CRITICAL, "Critical"),
+        (PRIORITY_HIGH, "High"),
+        (PRIORITY_MEDIUM, "Medium"),
+        (PRIORITY_LOW, "Low"),
+    ]
+
+    ROLE_LINE_OPERATOR = "Line Operator"
+    ROLE_MAINTENANCE_MAN = "Maintenance Man"
+    ROLE_PLANT_MANAGER = "Plant Maintenance Manager"
+    ROLE_AROL_SERVICE = "AROL Technical Service"
+    OWNER_ROLE_CHOICES = [
+        (ROLE_LINE_OPERATOR, "Line Operator"),
+        (ROLE_MAINTENANCE_MAN, "Maintenance Man"),
+        (ROLE_PLANT_MANAGER, "Plant Maintenance Manager"),
+        (ROLE_AROL_SERVICE, "AROL Technical Service"),
+    ]
+
+
+    ticket_id = models.CharField(max_length=64, primary_key=True)
+    machine = models.ForeignKey(
+        "Machine",
+        on_delete=models.CASCADE,
+        related_name = "maintenance_tickets",
+    )
+
+    alarm = models.ForeignKey(
+        "Alarm",
+        on_delete=models.SET_NULL,
+        related_name="maintenance_tickets",
+        null=True,
+        blank=True
+    )
+
+    ticket_type = models.CharField(max_length=32, choices=TYPE_CHOICES)
+    ticket_status = models.CharField(max_length=32, choices=STATUS_CHOICES)
+    priority = models.CharField(max_length=16, choices=PRIORITY_CHOICES)
+    created_date = models.DateField(null=True, blank=True)
+    owner_role = models.CharField(max_length=32, choices=OWNER_ROLE_CHOICES)
+
+    def __str__(self):
+        return f"{self.ticket_id} | {self.ticket_status}"
+
+
+class TelemetrySnapshot(models.Model):
+
+    STATUS_RUNNING = "Running"
+    STATUS_ALARM = "Alarm"
+    STATUS_IDLE = "Idle"
+    STATUS_STOPPED = "Stopped"
+    STATUS_MAINTENANCE = "Maintenance"
+    STATUS_SIZE_CHANGE = "Size change"
+    OPERATIONAL_STATUS_CHOICES = [
+        (STATUS_RUNNING, "Running"),
+        (STATUS_ALARM, "Alarm"),
+        (STATUS_IDLE, "Idle"),
+        (STATUS_STOPPED, "Stopped"),
+        (STATUS_MAINTENANCE, "Maintenance"),
+        (STATUS_SIZE_CHANGE, "Size change"),
+    ]
+
+
+    telemetry_id = models.CharField(max_length=64, primary_key=True)
+    machine = models.ForeignKey(
+        "Machine",
+        on_delete=models.CASCADE,
+        related_name="telemetry_snapshots",
+    )
+
+    timestamp = models.DateTimeField()
+    operational_status = models.CharField(
+        max_length=16,
+        choices=OPERATIONAL_STATUS_CHOICES,
+    )
+
+    production_rate_bph = models.FloatField(null=True, blank=True)
+    uptime_percentage = models.FloatField(null=True, blank=True)
+    alarm_count = models.IntegerField(default=0)
+    temperature_c = models.FloatField(null=True, blank=True)
+    energy_kwh = models.FloatField(null=True, blank=True)
+    health_note = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.machine_id} ---> {self.timestamp}"
