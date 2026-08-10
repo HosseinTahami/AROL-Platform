@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework import generics
 
-# Create your views here.
+from .models import Machine
+from .serializers import MachineSerializer
+
+class MachineListView(generics.ListAPIView):
+    queryset = Machine.objects.all()
+    serializer_class = MachineSerializer
