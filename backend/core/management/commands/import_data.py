@@ -48,6 +48,22 @@ class Command(BaseCommand):
             return None
         return value
 
+    def make_aware(self, value):
+            """Turn a timestamp cell into a timezone-aware datetime; pass through None."""
+            from django.utils import timezone
+            value = self.clean(value)
+            if value is None:
+                return None
+            # If it arrived as text, parse it into a real datetime first.
+            if isinstance(value, str):
+                value = pd.to_datetime(value)
+            # pandas datetimes need converting to plain Python datetimes.
+            if hasattr(value, "to_pydatetime"):
+                value = value.to_pydatetime()
+            if timezone.is_naive(value):
+                return timezone.make_aware(value)
+            return value
+
     # ------------------------------------------------------------------ #
     # Identity
     # ------------------------------------------------------------------ #
@@ -93,24 +109,26 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f"Imported {count} machine models"))
 
     def import_users(self, df):
-        from core.models import User, Company
+            from core.models import User, Company
 
-        count = 0
-        for _, row in df.iterrows():
-            User.objects.update_or_create(
-                user_id=row["userId"],
-                defaults={
-                    "username": row["email"],
-                    "company": Company.objects.get(company_id=row["companyId"]),
-                    "first_name": row["firstName"],
-                    "last_name": row["lastName"],
-                    "email": row["email"],
-                    "job_title": row["jobTitle"],
-                    "visibility": row["visibility"],
-                },
-            )
-            count += 1
-        self.stdout.write(self.style.SUCCESS(f"Imported {count} users"))
+            count = 0
+            for _, row in df.iterrows():
+                user, _ = User.objects.update_or_create(
+                    user_id=row["userId"],
+                    defaults={
+                        "username": row["email"],
+                        "company": Company.objects.get(company_id=row["companyId"]),
+                        "first_name": row["firstName"],
+                        "last_name": row["lastName"],
+                        "email": row["email"],
+                        "job_title": row["jobTitle"],
+                        "visibility": row["visibility"],
+                    },
+                )
+                user.set_password("arol1234")
+                user.save()
+                count += 1
+            self.stdout.write(self.style.SUCCESS(f"Imported {count} users"))
 
     def import_machines(self, df):
         from core.models import Machine, Company, MachineModel
@@ -244,7 +262,7 @@ class Command(BaseCommand):
                 alarm_id=row["alarmId"],
                 defaults={
                     "machine": Machine.objects.get(machine_id=row["machineId"]),
-                    "timestamp": row["timestamp"],
+                    "timestamp": self.make_aware(row["timestamp"]),
                     "alarm_code": row["alarmCode"],
                     "severity": row["severity"],
                     "alarm_status": row["alarmStatus"],
@@ -265,8 +283,7 @@ class Command(BaseCommand):
                 telemetry_id=row["telemetryId"],
                 defaults={
                     "machine": machines[row["machineId"]],
-                    "timestamp": row["timestamp"],
-                    "operational_status": row["operationalStatus"],
+                    "timestamp": self.make_aware(row["timestamp"]),                    "operational_status": row["operationalStatus"],
                     "production_rate_bph": self.clean(row["productionRateBph"]),
                     "uptime_percentage": self.clean(row["uptimePercentage"]),
                     "alarm_count": self.clean(row["alarmCount"]) or 0,
