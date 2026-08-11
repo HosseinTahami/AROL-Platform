@@ -142,10 +142,10 @@ class Command(BaseCommand):
                     "model": MachineModel.objects.get(model_id=row["modelId"]),
                     "serial_number": row["serialNumber"],
                     "delivery_date": self.clean(row["deliveryDate"]),
-                    "plant_location": row["plantLocation"],
-                    "configuration_profile": row["configurationProfile"],
-                    "plc_family": row["plcFamily"],
-                    "software_version": row["softwareVersion"],
+                    "plant_location": self.clean(row["plantLocation"]) or "",
+                    "configuration_profile": self.clean(row["configurationProfile"]) or "",
+                    "plc_family": self.clean(row["plcFamily"]) or "",
+                    "software_version": self.clean(row["softwareVersion"]) or "",
                 },
             )
             count += 1
