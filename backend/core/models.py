@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from pgvector.django import VectorField
 
 class User(AbstractUser):
 
@@ -445,3 +446,31 @@ class OrderLine(models.Model):
 
     def __str__(self):
         return f"{self.order_line_id} | {self.fulfillment_status}"
+
+
+class DocChunk(models.Model):
+
+    # Which Machine ?
+    machine = models.ForeignKey(
+        "Machine",
+        on_delete=models.CASCADE,
+        related_name="document_chunks"
+    )
+
+    # File Name (Manual Name)
+    source_file = models.CharField(max_length=255)
+
+    page_num = models.IntegerField(null=True, blank=True)
+
+    # Chunk Order in the file
+    chunk_index = models.IntegerField()
+
+    # Actual Text itself
+    content = models.TextField()
+
+    # Stores the meaning vector (nomic-embed-text --> 768)
+    embedding = VectorField(dimensions=768, null=True, blank=True)
+
+
+    def __str__(self):
+        return f"{self.source_file}  #{self.chunk_index}"
