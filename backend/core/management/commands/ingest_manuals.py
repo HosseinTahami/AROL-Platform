@@ -69,21 +69,15 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(
             f"  {pdf_path.name} -> {machine.serial_number}: {chunk_index} chunks"))
 
-    def chunk_page(self, text, max_chars=800):
-            """Split page text into <= max_chars chunks, never exceeding the cap."""
-            text = text.strip()
+    def chunk_page(self, text, max_chars=600, overlap=150):
+            """Split page text into overlapping chunks for better retrieval."""
+            text = " ".join(text.split())  # normalize whitespace
             if not text:
                 return []
-
             chunks = []
-            # First split on paragraphs, but hard-cut any piece that's still too long.
-            for para in text.split("\n\n"):
-                para = para.strip()
-                if not para:
-                    continue
-                while len(para) > max_chars:
-                    chunks.append(para[:max_chars])
-                    para = para[max_chars:]
-                if para:
-                    chunks.append(para)
+            start = 0
+            while start < len(text):
+                end = start + max_chars
+                chunks.append(text[start:end])
+                start = end - overlap  # step back by overlap for the next chunk
             return chunks

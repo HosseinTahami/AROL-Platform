@@ -1,0 +1,322 @@
+[
+  {
+    "question": "What does quote QTE-2026-0013 cover?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What does alarm AL032_CAPS_SORTER_MOTOR_OVERLOAD mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does alarm AL033_HEIGHT_REG_MOTOR_OVERLOAD mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does alarm AL023_CAPS_CHECK_INTERVENTION mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does alarm AL051_ENTRANCE_FEED_SCREW_SENSOR mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0022?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "How do I adjust the closure torque?",
+    "expected_agent": "manuals"
+  },
+  {
+    "question": "What does alarm AL086_LINE_EMERGENCY_PRESSED mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0010?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0009?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does alarm AL082_MINIMUM_CAPS_LEVEL mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does alarm AL029_RELEASE_ANTITWIST_HANDLES mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does quote QTE-2026-0011 cover?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "How do I clean the capping heads?",
+    "expected_agent": "manuals"
+  },
+  {
+    "question": "What does alarm AL077_HEAD_SAFETY_SWITCH mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What lubricant should I use?",
+    "expected_agent": "manuals"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0018?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does alarm AL089_CAP_CHECK_DEVICE_STOP mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0020?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the recommended maintenance schedule?",
+    "expected_agent": "manuals"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0019?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of order ORD-2025-0003?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0023?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does alarm AL019_CAPS_SORTER_UPPER_DOOR_OPEN mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0026?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0015?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does alarm AL052_INFEED_STARWHEEL_SENSOR mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0031?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does alarm AL024_FRONT_PANEL_EMERGENCY_PRESSED mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does quote QTE-2026-0010 cover?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What does quote QTE-2025-0005 cover?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What does alarm AL016_CAPS_CHUTE_FULL mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does quote QTE-2025-0001 cover?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What does alarm AL018_CAPS_SORTER_LATERAL_DOOR_OPEN mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0014?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does quote QTE-2025-0008 cover?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What does alarm AL067_EXIT_TUNNEL_OPEN mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of order ORD-2025-0005?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0008?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0029?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does alarm AL058_CAPS_SORTER_SAFETY_SENSOR mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of order ORD-2025-0002?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What is the status of order ORD-2025-0001?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0030?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does quote QTE-2025-0004 cover?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What does alarm AL017_LOW_AIR_PRESSURE mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of order ORD-2026-0006?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What safety precautions apply before opening the machine?",
+    "expected_agent": "manuals"
+  },
+  {
+    "question": "What does alarm AL031_HEADS_MOTOR_OVERLOAD mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0011?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of order ORD-2026-0008?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0028?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of order ORD-2025-0004?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What is the status of order ORD-2026-0007?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What does alarm AL062_RIGHT_REAR_DOOR_OPEN mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does alarm AL074_OVERTURNED_CAPS_CHECK mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does quote QTE-2025-0006 cover?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What does quote QTE-2025-0002 cover?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "How do I replace a closure head?",
+    "expected_agent": "manuals"
+  },
+  {
+    "question": "What does quote QTE-2026-0014 cover?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What does quote QTE-2026-0009 cover?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What does alarm AL060_RIGHT_FRONT_DOOR_OPEN mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does quote QTE-2026-0012 cover?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What does quote QTE-2025-0007 cover?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What does alarm AL066_ENTRANCE_TUNNEL_OPEN mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What does alarm AL020_HEIGHT_MAXIMUM_LIMIT_REACHED mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0017?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0012?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0024?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0016?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the maximum operating temperature?",
+    "expected_agent": "manuals"
+  },
+  {
+    "question": "What does alarm AL092_HEADS_MOTOR_DISCONNECT_OFF mean and how do I resolve it?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0021?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0007?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0025?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0027?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "What is the status of maintenance ticket TCK-0013?",
+    "expected_agent": "operational"
+  },
+  {
+    "question": "How do I perform a size change on this machine?",
+    "expected_agent": "manuals"
+  },
+  {
+    "question": "What does quote QTE-2025-0003 cover?",
+    "expected_agent": "commercial"
+  },
+  {
+    "question": "What does alarm AL088_CAP_CHECK_DEVICE_ALARM mean and how do I resolve it?",
+    "expected_agent": "operational"
+  }
+]
