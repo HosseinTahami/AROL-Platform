@@ -5,6 +5,8 @@ from pgvector.django import VectorField
 
 class User(AbstractUser):
 
+
+    # For visibility Column in User Data
     VISIBILITY_FULL = "full"
     VISIBILITY_TECHNICIAN = "technician"
     VISIBILITY_COMMERCIAL = "commercial"
@@ -17,6 +19,7 @@ class User(AbstractUser):
 
     user_id = models.CharField(max_length=64, unique=True, null=True, blank=True)
 
+    # Company Can be nullable, only and only for the admin account
     company = models.ForeignKey(
         "Company",
         on_delete=models.CASCADE,
@@ -34,7 +37,7 @@ class User(AbstractUser):
     )
 
     def __str__(self):
-        return self.username
+        return self.first_name + " " + self.last_name
 
 
 class Company(models.Model):
@@ -61,12 +64,17 @@ class MachineModel(models.Model):
     model_id = models.CharField(max_length=64, primary_key=True)
     model_code = models.CharField(max_length=64)
     description = models.CharField(max_length=256, blank=True)
+
+    # pitch diameter in mm
     primitive_diameter = models.FloatField(null=True, blank=True)
     cap_type = models.CharField(max_length=128, blank=True)
     container_type = models.CharField(max_length=128, blank=True)
+
+    # How many closure heads does this machine have
     nominal_heads = models.IntegerField(null=True, blank=True)
-    notes = models.TextField(blank=True)
     industry_segment = models.CharField(max_length=128, blank=True)
+    notes = models.TextField(blank=True)
+
 
     def __str__(self):
         return f"{self.model_code} | {self.model_id}"
@@ -143,6 +151,7 @@ class Alarm(models.Model):
     ]
 
     alarm_id = models.CharField(max_length=64, primary_key=True)
+
     machine = models.ForeignKey(
         "Machine",
         on_delete=models.CASCADE,
@@ -161,6 +170,8 @@ class Alarm(models.Model):
 
 class MaintenanceTicket(models.Model):
 
+
+    # Ticket Type
     TYPE_REMOTE = "Remote troubleshooting"
     TYPE_ONSITE = "On-site service"
     TYPE_SCHEDULED = "Scheduled maintenance"
@@ -178,7 +189,7 @@ class MaintenanceTicket(models.Model):
     ]
 
 
-
+    # Ticket Status
     STATUS_OPEN = "Open"
     STATUS_IN_PROGRESS = "In progress"
     STATUS_WAITING_PARTS = "Waiting for parts"
@@ -192,7 +203,7 @@ class MaintenanceTicket(models.Model):
         (STATUS_CLOSED, "Closed"),
     ]
 
-
+    # Priority
     PRIORITY_CRITICAL = "Critical"
     PRIORITY_HIGH = "High"
     PRIORITY_MEDIUM = "Medium"
@@ -204,6 +215,7 @@ class MaintenanceTicket(models.Model):
         (PRIORITY_LOW, "Low"),
     ]
 
+    # Owner Role
     ROLE_LINE_OPERATOR = "Line Operator"
     ROLE_MAINTENANCE_MAN = "Maintenance Man"
     ROLE_PLANT_MANAGER = "Plant Maintenance Manager"
@@ -217,6 +229,7 @@ class MaintenanceTicket(models.Model):
 
 
     ticket_id = models.CharField(max_length=64, primary_key=True)
+
     machine = models.ForeignKey(
         "Machine",
         on_delete=models.CASCADE,
@@ -280,7 +293,7 @@ class TelemetrySnapshot(models.Model):
     health_note = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.machine_id} ---> {self.timestamp}"
+        return f"{self.machine_id} | {self.timestamp}"
 
 
 class Quote(models.Model):
