@@ -1,19 +1,53 @@
-import pandas as pd
 from django.core.management.base import BaseCommand, CommandError
+from django.utils import timezone
+
+import pandas as pd
+
+from core.models import (
+    Company, Order, Machine, Quote, 
+    QuoteLine, QuoteRevision, User,
+    TelemetrySnapshot, MachineModel,
+    MaintenanceTicket, OrderLine, Alarm
+)
+
+
+
+
+"""
+    Our excel file which contains the data, has 12 sheets and each sheet
+    is one of the tables.
+
+    1. Companies            |       7. QuoteLines
+    2. MachineModels        |       8. Orders
+    3. Users                |       9. OrderLines
+    4. Machines             |       10. Alarms
+    5. Quotes               |       11. TelemetrySnapshots
+    6. QuoteRevisions       |       12. MaintenanceTickets
+    
+"""
 
 
 class Command(BaseCommand):
-    help = "Import the AROL dataset from the Excel workbook into the database"
+
+    help = "Import the AROL dataset from the Excel into the database"
+
+
+    """
+    python manage.py import_data --file path/to/data.xlsx
+    """
 
     def add_arguments(self, parser):
         parser.add_argument(
             "--file",
             type=str,
             required=True,
-            help="Path to the AROL dataset .xlsx workbook",
+            help="Path to dataset .xlsx",
         )
 
+
+    # What actually the commands do, after it is called
     def handle(self, *args, **options):
+
         file_path = options["file"]
         self.stdout.write(f"Reading workbook: {file_path}")
 
@@ -38,41 +72,54 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS("Import complete."))
 
-    # ------------------------------------------------------------------ #
-    # Helpers
-    # ------------------------------------------------------------------ #
+
 
     def clean(self, value):
-        """Convert pandas NaN (empty cell) into None so it becomes a DB NULL."""
+
+        """
+            Convert Pandas NaN (empty cells) 
+            
+            into
+             
+            Python 'None' so it becomes a DB NULL.
+        """
         if pd.isna(value):
             return None
         return value
 
     def make_aware(self, value):
-            """Turn a timestamp cell into a timezone-aware datetime; pass through None."""
-            from django.utils import timezone
+            
+            """
+            1. Excel dates sometimes arrive as plain text not date objects
+
+            2. Pandas internal date type isn't the same as Python
+
+            3. Timezone-naive & Timezone=aware
+            """
+
             value = self.clean(value)
             if value is None:
                 return None
-            # If it arrived as text, parse it into a real datetime first.
+
+            
+            # 1. if it arrived as text, parse it into a real datetime first.
             if isinstance(value, str):
                 value = pd.to_datetime(value)
-            # pandas datetimes need converting to plain Python datetimes.
+
+            # 2. pandas datetimes need converting to plain Python datetimes.
             if hasattr(value, "to_pydatetime"):
                 value = value.to_pydatetime()
+
+            # 3. attaches project's configured timezone (Europe/Rome) --> settings.py
             if timezone.is_naive(value):
                 return timezone.make_aware(value)
             return value
 
-    # ------------------------------------------------------------------ #
-    # Identity
-    # ------------------------------------------------------------------ #
 
     def import_companies(self, df):
-        from core.models import Company
 
         count = 0
-        for _, row in df.iterrows():
+        for _, row in df.iterrows(): # --> row, index inside df.iterrows
             Company.objects.update_or_create(
                 company_id=row["companyId"],
                 defaults={
@@ -85,10 +132,11 @@ class Command(BaseCommand):
                 },
             )
             count += 1
+
         self.stdout.write(self.style.SUCCESS(f"Imported {count} companies"))
 
+
     def import_machine_models(self, df):
-        from core.models import MachineModel
 
         count = 0
         for _, row in df.iterrows():
@@ -106,10 +154,11 @@ class Command(BaseCommand):
                 },
             )
             count += 1
+
         self.stdout.write(self.style.SUCCESS(f"Imported {count} machine models"))
 
+
     def import_users(self, df):
-            from core.models import User, Company
 
             count = 0
             for _, row in df.iterrows():
@@ -125,13 +174,14 @@ class Command(BaseCommand):
                         "visibility": row["visibility"],
                     },
                 )
-                user.set_password("arol1234")
+                user.set_password("arol1234") # --> It will hash the password
                 user.save()
                 count += 1
+
             self.stdout.write(self.style.SUCCESS(f"Imported {count} users"))
 
+
     def import_machines(self, df):
-        from core.models import Machine, Company, MachineModel
 
         count = 0
         for _, row in df.iterrows():
@@ -151,12 +201,9 @@ class Command(BaseCommand):
             count += 1
         self.stdout.write(self.style.SUCCESS(f"Imported {count} machines"))
 
-    # ------------------------------------------------------------------ #
-    # Commercial
-    # ------------------------------------------------------------------ #
+
 
     def import_quotes(self, df):
-        from core.models import Quote, Company
 
         count = 0
         for _, row in df.iterrows():
@@ -171,10 +218,12 @@ class Command(BaseCommand):
                 },
             )
             count += 1
+
         self.stdout.write(self.style.SUCCESS(f"Imported {count} quotes"))
 
+
+
     def import_quote_revisions(self, df):
-        from core.models import QuoteRevision, Quote
 
         count = 0
         for _, row in df.iterrows():
@@ -190,13 +239,21 @@ class Command(BaseCommand):
                 },
             )
             count += 1
+
         self.stdout.write(self.style.SUCCESS(f"Imported {count} quote revisions"))
 
+
+
     def import_quote_lines(self, df):
-        from core.models import QuoteLine, QuoteRevision, Machine
 
         count = 0
         for _, row in df.iterrows():
+
+            """
+                This is one of the edge cases:
+                    A QuoteLine or MaintenanceTicke with no machine/alarm attached
+            """
+
             machine_id = self.clean(row["machineId"])
             machine = Machine.objects.get(machine_id=machine_id) if machine_id else None
             QuoteLine.objects.update_or_create(
@@ -210,11 +267,13 @@ class Command(BaseCommand):
                     "description": row["description"],
                 },
             )
+
             count += 1
+
         self.stdout.write(self.style.SUCCESS(f"Imported {count} quote lines"))
 
+
     def import_orders(self, df):
-        from core.models import Order, Quote, Company
 
         count = 0
         for _, row in df.iterrows():
@@ -231,11 +290,14 @@ class Command(BaseCommand):
                     "notes": row["notes"],
                 },
             )
+
             count += 1
+
         self.stdout.write(self.style.SUCCESS(f"Imported {count} orders"))
 
+
+
     def import_order_lines(self, df):
-        from core.models import OrderLine, Order
 
         count = 0
         for _, row in df.iterrows():
@@ -247,14 +309,12 @@ class Command(BaseCommand):
                 },
             )
             count += 1
+
         self.stdout.write(self.style.SUCCESS(f"Imported {count} order lines"))
 
-    # ------------------------------------------------------------------ #
-    # Operational
-    # ------------------------------------------------------------------ #
+
 
     def import_alarms(self, df):
-        from core.models import Alarm, Machine
 
         count = 0
         for _, row in df.iterrows():
@@ -268,13 +328,24 @@ class Command(BaseCommand):
                     "alarm_status": row["alarmStatus"],
                 },
             )
+
             count += 1
+
         self.stdout.write(self.style.SUCCESS(f"Imported {count} alarms"))
 
+
     def import_telemetry(self, df):
-        from core.models import TelemetrySnapshot, Machine
 
         # Cache machines so we don't hit the DB on every one of the ~5,760 rows.
+        """
+            The sheet has ~5,760 rows, doing a separate database query for every single row
+            (like the other methods do) would be slow.
+            
+            Instead, this line loads all machines into memory once,
+            into a dictionary keyed by ID, before the loop starts.
+             
+            Then inside the loop, machines[row["machineId"]] is an instant lookup in memory
+        """
         machines = {m.machine_id: m for m in Machine.objects.all()}
 
         count = 0
@@ -292,11 +363,12 @@ class Command(BaseCommand):
                     "health_note": self.clean(row["healthNote"]) or "",
                 },
             )
+
             count += 1
+
         self.stdout.write(self.style.SUCCESS(f"Imported {count} telemetry snapshots"))
 
     def import_maintenance_tickets(self, df):
-        from core.models import MaintenanceTicket, Machine, Alarm
 
         count = 0
         for _, row in df.iterrows():
@@ -314,5 +386,7 @@ class Command(BaseCommand):
                     "owner_role": row["ownerRole"],
                 },
             )
+
             count += 1
+
         self.stdout.write(self.style.SUCCESS(f"Imported {count} maintenance tickets"))
