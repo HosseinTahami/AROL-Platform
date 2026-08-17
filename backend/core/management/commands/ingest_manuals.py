@@ -1,16 +1,19 @@
-from pathlib import Path
-
-import ollama, pypdf
-
 from django.core.management.base import BaseCommand, CommandError
-
 from core.models import Machine, DocChunk
 
 from pathlib import Path
+import ollama, pypdf
 
 
 
 class Command(BaseCommand):
+
+    """
+        This command job is to turning pdfs into
+        stored searchable chunks, so LLMs can 
+        use them to answer questions.
+    
+    """
 
     help = """
             - Read manual PDFss
@@ -32,6 +35,8 @@ class Command(BaseCommand):
         self.stdout.write(f"Found {len(pdfs)} PDF files")
 
         for pdf_path in pdfs:
+
+            # <serialNumber>_manual_EN.pdf
             serial = pdf_path.name.split("_")[0]   # "15610_manual_EN.pdf" -> "15610"
             machine = Machine.objects.filter(serial_number=serial).first()
             if machine is None:
@@ -39,7 +44,8 @@ class Command(BaseCommand):
                     f"  skip {pdf_path.name}: no machine with serial {serial}"))
                 continue
 
-            # Clear old chunks for this machine (re-runnable)
+            # Clear old chunks for this machine --> it will make this command re-runnalbe
+            # without any duplications
             DocChunk.objects.filter(machine=machine, source_file=pdf_path.name).delete()
 
             self.ingest_pdf(pdf_path, machine)
@@ -51,11 +57,21 @@ class Command(BaseCommand):
         chunk_index = 0
 
         for page_num, page in enumerate(reader.pages, start=1):
+            """
+                If a page has no text, then if will 
+                give us "", rather than None.
+            """
             text = page.extract_text() or ""
-            for chunk_text in self.chunk_page(text):
+
+            chunks_of_text = self.chunk_page(text)
+
+            for chunk_text in chunks_of_text:
+
                 embedding = ollama.embeddings(
-                    model="nomic-embed-text", prompt=chunk_text
+                    model="nomic-embed-text",
+                    prompt=chunk_text
                 )["embedding"]
+
                 DocChunk.objects.create(
                     machine=machine,
                     source_file=pdf_path.name,
@@ -64,6 +80,7 @@ class Command(BaseCommand):
                     content=chunk_text,
                     embedding=embedding,
                 )
+
                 chunk_index += 1
 
         self.stdout.write(self.style.SUCCESS(
