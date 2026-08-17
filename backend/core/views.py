@@ -20,6 +20,15 @@ class MachineModelListView(ListAPIView):
     def get_queryset(self):
         # Only models used by this company's machines
         company = self.request.user.company
+
+        """
+            MachineModel has a reverse relationship to Machine
+            so machines__company means 
+            '''
+                look at this MachineModel's related Machines,
+                and check their company field.
+            '''
+        """
         return models.MachineModel.objects.filter(
             machines__company=company
         ).distinct()
@@ -29,6 +38,14 @@ class AlarmListView(ListAPIView):
     permission_classes = [CanSeeOperational]
 
     def get_queryset(self):
+
+        """
+            Alarm doesn't have its own company field,
+            but it has a machine, and that has a company.
+            
+            So machine__company= walks through the relationship
+            to filter by the machine's owner.
+        """
         return models.Alarm.objects.filter(
             machine__company=self.request.user.company
         )

@@ -6,11 +6,11 @@ from . import models
 """
       Translate Python Objects 
 
-                 ||
-                 ||
-                 ||
-                 \/
-
+                | 
+                | 
+                | 
+                V
+                
              JSON TEXT
 
 """
