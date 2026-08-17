@@ -1,5 +1,15 @@
 from rest_framework.permissions import BasePermission
 
+
+
+"""
+    A permission decides, wether a particular user is 
+    allowed to ask for some specific data or not 
+
+    'has_permission' is the method which is called
+    automatically on all the sended requests.
+"""
+
 class CanSeeOperational(BasePermission):
     """
         Only 'full & technician' see telemetry, alarms, maintenance

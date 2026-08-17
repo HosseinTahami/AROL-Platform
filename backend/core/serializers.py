@@ -3,6 +3,18 @@ from rest_framework import serializers
 from . import models
 
 
+"""
+      Translate Python Objects 
+
+                 ||
+                 ||
+                 ||
+                 \/
+
+             JSON TEXT
+
+"""
+
 class MachineSerializer(serializers.ModelSerializer):
 
     class Meta:
