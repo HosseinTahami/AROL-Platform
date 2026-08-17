@@ -32,7 +32,7 @@ class AlarmSerializer(serializers.ModelSerializer):
 class TelemetrySnapshotSerializer(serializers.ModelSerializer):
 
     class Meta:
-        models = models.TelemetrySnapshot
+        model = models.TelemetrySnapshot
         fields = "__all__"
 
 class MaintenanceTicketSerializer(serializers.ModelSerializer):
