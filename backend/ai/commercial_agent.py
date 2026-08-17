@@ -6,16 +6,16 @@ CHAT_MODEL = "qwen3.5:9b"
 
 def gather_commercial_data(company):
     """
-        Get this company's orders and quotes as a readable text
+        Gather company's orders and quotes as a readable text
     """
 
-    lines = []
+    gathered_data = []
 
     orders = Order.objects.filter(company=company)
-    lines.append(f"ORDERS ({orders.count()}):")
+    gathered_data.append(f"ORDERS ({orders.count()}):")
 
     for order in orders:
-        lines.append(
+        gathered_data.append(
             f"- {order.order_id}: status={order.order_status}, "
             f"shipment={order.shipment_status}, ordered={order.order_date}, "
             f"expected={order.expected_delivery_date}, from quote {order.quote_id}. "
@@ -24,21 +24,24 @@ def gather_commercial_data(company):
 
     quotes = Quote.objects.filter(company=company)
 
-    lines.append(f"\nQUOTES ({quotes.count()}):")
+    gathered_data.append(f"\nQUOTES ({quotes.count()}):")
 
-    for q in quotes:
-        # current revision = highest revision number
-        latest = (QuoteRevision.objects.filter(quote=q)
-                  .order_by("-revision_number").first())
+    for quote in quotes:
+
+        # Highest Revision Number is First --> latest (the current last)
+        latest = (QuoteRevision.objects.filter(quote=quote)
+                  .order_by("-revision_number").first()
+        )
+        
         rev_info = ""
         if latest:
             rev_info = (f" latest revision {latest.revision_number} "
                         f"({latest.revision_status}), discount {latest.discount_rate}")
-        lines.append(
-            f"- {q.quote_id}: {q.description}, valid until {q.valid_until}.{rev_info}"
+        gathered_data.append(
+            f"- {quote.quote_id}: {quote.description}, valid until {quote.valid_until}.{rev_info}"
         )
 
-    return "\n".join(lines)
+    return "\n".join(gathered_data)
 
 
 def answer_commercial(company, question):
