@@ -6,12 +6,27 @@ from core.models import DocChunk
 CHAT_MODEL = "qwen3.5:9b"
 EMBED_MODEL = "nomic-embed-text"
 
+"""
+    RAG: Retrive Augmented Generation
+
+        - R: retrive_chunks method
+
+        - AG: answer_from_manual
+
+"""
+
+
 def retrive_chunks(machine, query, top_k=5):
     """
         Finding the most relevant manul for a machine + query.
     """
 
+    # Convert user's question with the same EMBED_MODEL
     qvec = ollama.embeddings(model=EMBED_MODEL, prompt=query)["embedding"]
+
+    # order the result base on 2 vectors similarity 
+    # similarity is measured base on the cosine of the angle
+    # between the 2 vectors (text chunks & question)
     result = DocChunk.objects.filter(machine=machine).order_by(
         CosineDistance("embedding", qvec)
     )
@@ -40,11 +55,19 @@ def answer_from_manual(machine, question):
 
 
     system_prompt = (
-        "You are a technical assistant for AROL capping machines. "
-        "Answer the user's question using ONLY the manual excerpts provided. "
-        "If the excerpts don't contain the answer, say so plainly. "
-        "Cite the page numbers you used, like (page 98). "
-        "Be concise and practical."
+        "You are a technical troubleshooting assistant for AROL capping machines. "
+        "You answer questions using ONLY the manual excerpts provided below - "
+        "never use outside knowledge, even if you believe it to be correct.\n\n"
+        "Rules:\n"
+        "- If the excerpts do not contain enough information to answer, say so "
+        "plainly instead of guessing.\n"
+        "- Every claim you make must be traceable to a specific excerpt; cite the "
+        "page number in parentheses immediately after the claim, e.g. (page 98).\n"
+        "- If excerpts appear to conflict, point out the conflict rather than "
+        "silently picking one.\n"
+        "- Be concise: prefer short, numbered steps for procedures over long prose.\n"
+        "- Do not invent part numbers, torque values, dimensions, or other specific "
+        "figures that are not explicitly present in the excerpts."
     )
 
     user_prompt = (
