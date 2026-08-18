@@ -1,0 +1,92 @@
+[
+  {
+    "question": "What is the status of order ORD-2025-0005?",
+    "machine_serial": "A2055",
+    "reference_fact": "Order ORD-2025-0005 has status 'Closed' and shipment status 'Installed'."
+  },
+  {
+    "question": "What is the status of order ORD-2026-0006?",
+    "machine_serial": "15610",
+    "reference_fact": "Order ORD-2026-0006 has status 'Delivered' and shipment status 'Delivered'."
+  },
+  {
+    "question": "What is the severity and status of alarm ALM-0011 (AL024_FRONT_PANEL_EMERGENCY_PRESSED) on machine 15610?",
+    "machine_serial": "15610",
+    "reference_fact": "Alarm ALM-0011 (AL024_FRONT_PANEL_EMERGENCY_PRESSED) has severity 'Critical' and status 'Resolved'."
+  },
+  {
+    "question": "What is the status of order ORD-2026-0008?",
+    "machine_serial": "17478",
+    "reference_fact": "Order ORD-2026-0008 has status 'Confirmed' and shipment status 'Ready for shipment'."
+  },
+  {
+    "question": "What is the severity and status of alarm ALM-0012 (AL023_CAPS_CHECK_INTERVENTION) on machine 15610?",
+    "machine_serial": "15610",
+    "reference_fact": "Alarm ALM-0012 (AL023_CAPS_CHECK_INTERVENTION) has severity 'Medium' and status 'Resolved'."
+  },
+  {
+    "question": "What is the severity and status of alarm ALM-0016 (AL017_LOW_AIR_PRESSURE) on machine 15610?",
+    "machine_serial": "15610",
+    "reference_fact": "Alarm ALM-0016 (AL017_LOW_AIR_PRESSURE) has severity 'High' and status 'Resolved'."
+  },
+  {
+    "question": "What is the severity and status of alarm ALM-0015 (AL051_ENTRANCE_FEED_SCREW_SENSOR) on machine 15610?",
+    "machine_serial": "15610",
+    "reference_fact": "Alarm ALM-0015 (AL051_ENTRANCE_FEED_SCREW_SENSOR) has severity 'Medium' and status 'Resolved'."
+  },
+  {
+    "question": "What is the status of order ORD-2025-0001?",
+    "machine_serial": "15610",
+    "reference_fact": "Order ORD-2025-0001 has status 'Closed' and shipment status 'Installed'."
+  },
+  {
+    "question": "What is the severity and status of alarm ALM-0010 (AL067_EXIT_TUNNEL_OPEN) on machine 15610?",
+    "machine_serial": "15610",
+    "reference_fact": "Alarm ALM-0010 (AL067_EXIT_TUNNEL_OPEN) has severity 'High' and status 'Resolved'."
+  },
+  {
+    "question": "What is the status of order ORD-2025-0004?",
+    "machine_serial": "15610",
+    "reference_fact": "Order ORD-2025-0004 has status 'Closed' and shipment status 'Installed'."
+  },
+  {
+    "question": "What is the severity and status of alarm ALM-0014 (AL087_BOTTLE_PRESENCE_SENSOR_CHECK) on machine 15610?",
+    "machine_serial": "15610",
+    "reference_fact": "Alarm ALM-0014 (AL087_BOTTLE_PRESENCE_SENSOR_CHECK) has severity 'Medium' and status 'Resolved'."
+  },
+  {
+    "question": "What is the status of order ORD-2025-0003?",
+    "machine_serial": "17478",
+    "reference_fact": "Order ORD-2025-0003 has status 'Closed' and shipment status 'Installed'."
+  },
+  {
+    "question": "What is the severity and status of alarm ALM-0018 (AL016_CAPS_CHUTE_FULL) on machine 15610?",
+    "machine_serial": "15610",
+    "reference_fact": "Alarm ALM-0018 (AL016_CAPS_CHUTE_FULL) has severity 'Low' and status 'Resolved'."
+  },
+  {
+    "question": "What is the status of order ORD-2026-0007?",
+    "machine_serial": "A2055",
+    "reference_fact": "Order ORD-2026-0007 has status 'In production' and shipment status 'In production'."
+  },
+  {
+    "question": "What is the severity and status of alarm ALM-0013 (AL077_HEAD_SAFETY_SWITCH) on machine 15610?",
+    "machine_serial": "15610",
+    "reference_fact": "Alarm ALM-0013 (AL077_HEAD_SAFETY_SWITCH) has severity 'High' and status 'Resolved'."
+  },
+  {
+    "question": "What is the severity and status of alarm ALM-0009 (AL083_FALLEN_BOTTLE_ALARM) on machine 15610?",
+    "machine_serial": "15610",
+    "reference_fact": "Alarm ALM-0009 (AL083_FALLEN_BOTTLE_ALARM) has severity 'Medium' and status 'Resolved'."
+  },
+  {
+    "question": "What is the severity and status of alarm ALM-0017 (AL057_BOTTLE_TOO_HIGH) on machine 15610?",
+    "machine_serial": "15610",
+    "reference_fact": "Alarm ALM-0017 (AL057_BOTTLE_TOO_HIGH) has severity 'High' and status 'Acknowledged'."
+  },
+  {
+    "question": "What is the status of order ORD-2025-0002?",
+    "machine_serial": "A2064",
+    "reference_fact": "Order ORD-2025-0002 has status 'Closed' and shipment status 'Installed'."
+  }
+]
