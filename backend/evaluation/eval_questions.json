@@ -5,19 +5,19 @@
   },
   {
     "question": "What does alarm AL032_CAPS_SORTER_MOTOR_OVERLOAD mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What does alarm AL033_HEIGHT_REG_MOTOR_OVERLOAD mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What does alarm AL023_CAPS_CHECK_INTERVENTION mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What does alarm AL051_ENTRANCE_FEED_SCREW_SENSOR mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What is the status of maintenance ticket TCK-0022?",
@@ -29,7 +29,7 @@
   },
   {
     "question": "What does alarm AL086_LINE_EMERGENCY_PRESSED mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What is the status of maintenance ticket TCK-0010?",
@@ -41,11 +41,11 @@
   },
   {
     "question": "What does alarm AL082_MINIMUM_CAPS_LEVEL mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What does alarm AL029_RELEASE_ANTITWIST_HANDLES mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What does quote QTE-2026-0011 cover?",
@@ -57,7 +57,7 @@
   },
   {
     "question": "What does alarm AL077_HEAD_SAFETY_SWITCH mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What lubricant should I use?",
@@ -69,7 +69,7 @@
   },
   {
     "question": "What does alarm AL089_CAP_CHECK_DEVICE_STOP mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What is the status of maintenance ticket TCK-0020?",
@@ -93,7 +93,7 @@
   },
   {
     "question": "What does alarm AL019_CAPS_SORTER_UPPER_DOOR_OPEN mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What is the status of maintenance ticket TCK-0026?",
@@ -105,7 +105,7 @@
   },
   {
     "question": "What does alarm AL052_INFEED_STARWHEEL_SENSOR mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What is the status of maintenance ticket TCK-0031?",
@@ -113,7 +113,7 @@
   },
   {
     "question": "What does alarm AL024_FRONT_PANEL_EMERGENCY_PRESSED mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What does quote QTE-2026-0010 cover?",
@@ -125,7 +125,7 @@
   },
   {
     "question": "What does alarm AL016_CAPS_CHUTE_FULL mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What does quote QTE-2025-0001 cover?",
@@ -133,7 +133,7 @@
   },
   {
     "question": "What does alarm AL018_CAPS_SORTER_LATERAL_DOOR_OPEN mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What is the status of maintenance ticket TCK-0014?",
@@ -145,7 +145,7 @@
   },
   {
     "question": "What does alarm AL067_EXIT_TUNNEL_OPEN mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What is the status of order ORD-2025-0005?",
@@ -161,7 +161,7 @@
   },
   {
     "question": "What does alarm AL058_CAPS_SORTER_SAFETY_SENSOR mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What is the status of order ORD-2025-0002?",
@@ -181,7 +181,7 @@
   },
   {
     "question": "What does alarm AL017_LOW_AIR_PRESSURE mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What is the status of order ORD-2026-0006?",
@@ -193,7 +193,7 @@
   },
   {
     "question": "What does alarm AL031_HEADS_MOTOR_OVERLOAD mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What is the status of maintenance ticket TCK-0011?",
@@ -217,11 +217,11 @@
   },
   {
     "question": "What does alarm AL062_RIGHT_REAR_DOOR_OPEN mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What does alarm AL074_OVERTURNED_CAPS_CHECK mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What does quote QTE-2025-0006 cover?",
@@ -245,7 +245,7 @@
   },
   {
     "question": "What does alarm AL060_RIGHT_FRONT_DOOR_OPEN mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What does quote QTE-2026-0012 cover?",
@@ -257,11 +257,11 @@
   },
   {
     "question": "What does alarm AL066_ENTRANCE_TUNNEL_OPEN mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What does alarm AL020_HEIGHT_MAXIMUM_LIMIT_REACHED mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What is the status of maintenance ticket TCK-0017?",
@@ -285,7 +285,7 @@
   },
   {
     "question": "What does alarm AL092_HEADS_MOTOR_DISCONNECT_OFF mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   },
   {
     "question": "What is the status of maintenance ticket TCK-0021?",
@@ -317,6 +317,6 @@
   },
   {
     "question": "What does alarm AL088_CAP_CHECK_DEVICE_ALARM mean and how do I resolve it?",
-    "expected_agent": "operational"
+    "expected_agent": "diagnosis"
   }
 ]
