@@ -1,0 +1,30 @@
+[
+  {
+    "question": "Why is this machine alarming and is it covered by warranty?",
+    "expected_agents": ["diagnosis", "commercial"]
+  },
+  {
+    "question": "What does the low air pressure alarm mean, and what maintenance has been done on this machine recently?",
+    "expected_agents": ["manuals", "operational"]
+  },
+  {
+    "question": "Is there an open order for this machine, and why does it keep raising the same alarm?",
+    "expected_agents": ["commercial", "diagnosis"]
+  },
+  {
+    "question": "The machine keeps alarming for a caps chute fault - what does that mean, and are there any open maintenance tickets for it?",
+    "expected_agents": ["diagnosis", "operational"]
+  },
+  {
+    "question": "We're about to place a new order for this machine - is it currently running without issues?",
+    "expected_agents": ["commercial", "operational"]
+  },
+  {
+    "question": "How do I safely open the machine for maintenance, and does it have any active alarms right now?",
+    "expected_agents": ["manuals", "operational"]
+  },
+  {
+    "question": "What was the latest quote revision for this machine, and does the manual say anything about the components it added?",
+    "expected_agents": ["commercial", "manuals"]
+  }
+]
