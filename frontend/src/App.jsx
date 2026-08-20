@@ -5,7 +5,7 @@ const API = "http://localhost:8001/api";
 
 function machineFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("machine") || "MCH-0001";
+  return params.get("machine"); // no fallback — returns null if absent
 }
 
 function App() {
@@ -13,17 +13,41 @@ function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  const [machineCheck, setMachineCheck] = useState(null);
   const [question, setQuestion] = useState("");
   const [machineId, setMachineId] = useState(machineFromUrl());
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [dark, setDark] = useState(() => localStorage.getItem("dark") !== "0");
+  const [me, setMe] = useState(null);
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-bs-theme", dark ? "dark" : "light");
-    localStorage.setItem("dark", dark ? "1" : "0");
-  }, [dark]);
+    if (!token) {
+      setMe(null);
+      return;
+    }
+    fetch(`${API}/me/`, { headers: { Authorization: `Token ${token}` } })
+      .then((res) => res.json())
+      .then(setMe)
+      .catch(() => setMe(null));
+  }, [token]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-bs-theme", "dark");
+  }, []);
+
+  useEffect(() => {
+    if (!token || !machineId) {
+      setMachineCheck(machineId ? null : { valid: false, reason: "none" });
+      return;
+    }
+    setMachineCheck(null); // show "checking" while the request is in flight
+    fetch(`${API}/machines/${machineId}/check/`, {
+      headers: { Authorization: `Token ${token}` },
+    })
+      .then((res) => res.json())
+      .then(setMachineCheck)
+      .catch(() => setMachineCheck({ valid: false, reason: "error" }));
+  }, [token, machineId]);
 
   async function login() {
     setError("");
@@ -74,30 +98,49 @@ function App() {
     setLoading(false);
   }
 
-  const Navbar = () => (
-    <nav className="navbar navbar-expand px-4 mb-4 border-bottom">
-      <span className="navbar-brand fw-bold">
-        <span className="text-primary">AROL</span> Assistant
-      </span>
-      <div className="ms-auto d-flex align-items-center gap-2">
-        {token && (
-          <span className="badge bg-secondary">Machine: {machineId}</span>
-        )}
-        <button
-          className="btn btn-outline-secondary btn-sm"
-          onClick={() => setDark((d) => !d)}
-        >
-          {dark ? "☀" : "🌙"}
-        </button>
-        {token && (
-          <button className="btn btn-outline-danger btn-sm" onClick={logout}>
-            Log out
-          </button>
-        )}
-      </div>
-    </nav>
-  );
+const Navbar = () => (
+  <nav className="navbar navbar-expand px-4 mb-4 border-bottom">
+    <span className="navbar-brand fw-bold">
+      <span className="text-primary">AROL</span> Assistant
+    </span>
+    <div className="ms-auto d-flex align-items-center gap-2">
+      {token && machineId && (
+        <span className="badge bg-secondary">Machine: {machineId}</span>
+      )}
 
+      {token && me && (
+        <div className="position-relative" style={{ cursor: "default" }}
+             onMouseEnter={(e) => e.currentTarget.querySelector(".profile-popover").style.display = "block"}
+             onMouseLeave={(e) => e.currentTarget.querySelector(".profile-popover").style.display = "none"}>
+          <span className="badge bg-primary-subtle text-primary-emphasis">
+             {me.first_name}
+          </span>
+          <div
+            className="profile-popover card shadow-sm position-absolute end-0 mt-1"
+            style={{ display: "none", zIndex: 1000, minWidth: 220 }}
+          >
+            <div className="card-body py-2 px-3">
+              <div className="fw-semibold">{me.first_name} {me.last_name}</div>
+              <div className="small text-muted">{me.email}</div>
+              <div className="small mt-1">
+                <span className="badge bg-info-subtle text-info-emphasis">
+                  {me.visibility}
+                </span>
+                {me.company && <span className="ms-1 small text-muted">{me.company}</span>}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {token && (
+        <button className="btn btn-outline-danger btn-sm" onClick={logout}>
+          Log out
+        </button>
+      )}
+    </div>
+  </nav>
+);
   // ---- Login screen ----
   if (!token) {
     return (
@@ -132,90 +175,110 @@ function App() {
     );
   }
 
-  // ---- Chat screen ----
+  // ---- Machine-gated chat screen ----
   return (
     <>
       <Navbar />
-      <div className="container" style={{ maxWidth: 820 }}>
-        <div
-          className="d-flex flex-column gap-3 mb-3 p-2"
-          style={{ minHeight: 380, maxHeight: 520, overflowY: "auto" }}
-        >
-          {messages.length === 0 && (
-            <div className="text-muted text-center my-auto">
-              <div style={{ fontSize: 40 }}>💬</div>
-              Ask about manuals, alarms, or orders for {machineId}.
-            </div>
-          )}
 
-          {messages.map((m, i) =>
-            m.role === "user" ? (
-              <div key={i} className="d-flex justify-content-end">
-                <div
-                  className="bg-primary text-white rounded-4 px-3 py-2"
-                  style={{ maxWidth: "75%", whiteSpace: "pre-wrap" }}
-                >
-                  {m.text}
-                </div>
+      {machineCheck === null ? (
+        <div className="container" style={{ maxWidth: 600 }}>
+          <p className="text-muted mt-4">Checking machine…</p>
+        </div>
+      ) : !machineCheck.valid ? (
+        <div className="container" style={{ maxWidth: 600 }}>
+          <div className="alert alert-warning mt-4">
+            {machineCheck.reason === "not_found" && "This machine was not found."}
+            {machineCheck.reason === "not_yours" &&
+              "This machine does not belong to your company."}
+            {machineCheck.reason === "none" &&
+              "No machine selected. Please scan a machine's QR code to start."}
+            {machineCheck.reason === "error" &&
+              "Could not verify this machine right now."}
+          </div>
+        </div>
+      ) : (
+        <div className="container" style={{ maxWidth: 820 }}>
+          <div
+            className="d-flex flex-column gap-3 mb-3 p-2"
+            style={{ minHeight: 380, maxHeight: 520, overflowY: "auto" }}
+          >
+            {messages.length === 0 && (
+              <div className="text-muted text-center my-auto">
+                <div style={{ fontSize: 40 }}>💬</div>
+                Ask about manuals, alarms, or orders for {machineId}.
               </div>
-            ) : (
-              <div key={i} className="d-flex justify-content-start">
-                <div
-                  className="card rounded-4 shadow-sm"
-                  style={{ maxWidth: "85%" }}
-                >
-                  <div className="card-body py-2 px-3">
+            )}
+
+            {messages.map((m, i) =>
+              m.role === "user" ? (
+                <div key={i} className="d-flex justify-content-end">
+                  <div
+                    className="bg-primary text-white rounded-4 px-3 py-2"
+                    style={{ maxWidth: "75%", whiteSpace: "pre-wrap" }}
+                  >
+                    {m.text}
+                  </div>
+                </div>
+              ) : (
+                <div key={i} className="d-flex justify-content-start">
+                  <div className="card rounded-4 shadow-sm" style={{ maxWidth: "85%" }}>
+                    <div className="card-body py-2 px-3">
                       {m.agents && m.agents.length > 0 && (
-                        <span className={`badge mb-2 ${m.refused ? "bg-danger" : "bg-info-subtle text-info-emphasis"}`}>
+                        <span
+                          className={`badge mb-2 ${
+                            m.refused ? "bg-danger" : "bg-info-subtle text-info-emphasis"
+                          }`}
+                        >
                           {m.refused ? "⛔ Refused" : `🤖 ${m.agents.join(" + ")}`}
                         </span>
                       )}
-                    <div className="markdown-body">
-                      <ReactMarkdown>{m.answer}</ReactMarkdown>
+                      <div className="markdown-body">
+                        <ReactMarkdown>{m.answer}</ReactMarkdown>
+                      </div>
+                      {m.sources && m.sources.length > 0 && (
+                        <p className="mt-2 mb-0 small text-muted border-top pt-2">
+                          📄 Sources: {m.sources.map((s) => `p.${s.page}`).join(", ")}
+                        </p>
+                      )}
                     </div>
-                    {m.sources && m.sources.length > 0 && (
-                      <p className="mt-2 mb-0 small text-muted border-top pt-2">
-                        📄 Sources: {m.sources.map((s) => `p.${s.page}`).join(", ")}
-                      </p>
-                    )}
+                  </div>
+                </div>
+              )
+            )}
+
+            {loading && (
+              <div className="d-flex justify-content-start">
+                <div className="card rounded-4 shadow-sm">
+                  <div className="card-body py-2 px-3 text-muted">
+                    <span className="spinner-border spinner-border-sm me-2" />
+                    Thinking…
                   </div>
                 </div>
               </div>
-            )
-          )}
+            )}
+          </div>
 
-          {loading && (
-            <div className="d-flex justify-content-start">
-              <div className="card rounded-4 shadow-sm">
-                <div className="card-body py-2 px-3 text-muted">
-                  <span className="spinner-border spinner-border-sm me-2" />
-                  Thinking…
-                </div>
-              </div>
-            </div>
-          )}
+          <div className="input-group input-group-lg mb-4">
+            <textarea
+              className="form-control"
+              rows={1}
+              placeholder="Type your question…"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  ask();
+                }
+              }}
+              style={{ resize: "none" }}
+            />
+            <button className="btn btn-primary px-4" onClick={ask} disabled={loading}>
+              Send
+            </button>
+          </div>
         </div>
-
-        <div className="input-group input-group-lg mb-4">
-          <textarea
-            className="form-control"
-            rows={1}
-            placeholder="Type your question…"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                ask();
-              }
-            }}
-            style={{ resize: "none" }}
-          />
-          <button className="btn btn-primary px-4" onClick={ask} disabled={loading}>
-            Send
-          </button>
-        </div>
-      </div>
+      )}
     </>
   );
 }

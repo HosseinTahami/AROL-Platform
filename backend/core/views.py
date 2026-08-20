@@ -1,5 +1,6 @@
 from rest_framework.generics import ListAPIView
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from . import models, serializers
 from .permissions import CanSeeCommercial, CanSeeOperational
@@ -112,3 +113,27 @@ class OrderLineListView(ListAPIView):
         return models.OrderLine.objects.filter(
             order__company=self.request.user.company
         )
+
+class MachineCheckView(APIView):
+    def get(self, request, machine_id):
+        machine = models.Machine.objects.filter(machine_id=machine_id).first()
+        if machine is None:
+            return Response({"valid": False, "reason": "not_found"})
+        if machine.company_id != request.user.company_id:
+            return Response({"valid": False, "reason": "not_yours"})
+        return Response({
+            "valid": True,
+            "machine_id": machine.machine_id,
+            "serial_number": machine.serial_number,
+        })
+
+class MeView(APIView):
+    def get(self, request):
+        u = request.user
+        return Response({
+            "first_name": u.first_name,
+            "last_name": u.last_name,
+            "email": u.email,
+            "visibility": u.visibility,
+            "company": u.company.company_name if u.company else None,
+        })
