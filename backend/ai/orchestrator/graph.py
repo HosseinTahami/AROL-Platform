@@ -166,16 +166,33 @@ def route_after_scope(state):
 def route_after_visibility(state):
     return "run_agents" if not state["refused"] else END
 
-
+# Empty Blue Print
 OrchestratorState = dict
 
-builder = StateGraph(OrchestratorState)
+
+builder = StateGraph(OrchestratorState)      
+
+# Register Step:
+#   Company-check logic
 builder.add_node("scope_check", scope_check)
+
+# Register Step:
+#   Routing-Decision Step
 builder.add_node("planner", planner)
+
+# Register Step:
+#   Role Permission
 builder.add_node("visibility_check", visibility_check)
+
+# Register Step:
+#   Calls the real agents
 builder.add_node("run_agents", run_agents)
+
+# Register Step:
+#   Final Merge Step
 builder.add_node("synthesizer", synthesizer)
 
+# Connecting the Nodes 
 builder.add_edge(START, "scope_check")
 builder.add_conditional_edges("scope_check", route_after_scope, {"planner": "planner", END: END})
 builder.add_edge("planner", "visibility_check")
