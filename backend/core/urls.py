@@ -15,4 +15,6 @@ urlpatterns = [
     path("quote-lines/", views.QuoteLineListView.as_view(), name="quoteline-list"),
     path("orders/", views.OrderListView.as_view(), name="order-list"),
     path("order-lines/", views.OrderLineListView.as_view(), name="orderline-list"),
+    path("machines/<str:machine_id>/check/", views.MachineCheckView.as_view(), name="machine-check"),
+    path("me/", views.MeView.as_view(), name="me"),
 ]

@@ -1,6 +1,5 @@
-from rest_framework.views import APIView, Response
-from rest_framework.views import Response
-from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from core.models import Machine
 
@@ -49,3 +48,5 @@ class ChatView(APIView):
             "refused": False,
             "trace": result["trace"],
         })
+
+    
