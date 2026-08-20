@@ -7,6 +7,8 @@ from ai.agents.manuals_agent import answer_from_manual
 from ai.agents.commercial_agent import answer_commercial
 from ai.agents.operational_agent import answer_operational
 from ai.agents.operational_agent import diagnose_alarm
+from typing import TypedDict
+
 
 CHAT_MODEL = "qwen3.5:9b"
 
@@ -24,6 +26,19 @@ VISIBILITY_ALLOWED = {
     "technician": {"manuals", "operational", "diagnosis"},
     "commercial": {"manuals", "commercial"},
 }
+
+
+
+class OrchestratorState(TypedDict):
+    question: str
+    user_id: int
+    machine_id: str
+    refused: bool
+    refusal_reason: str
+    agents_to_call: list
+    agent_results: dict
+    final_answer: str
+    trace: list
 
 
 def scope_check(state):
@@ -102,7 +117,7 @@ def run_agents(state):
         elif agent == "operational":
             results["operational"] = answer_operational(machine, state["question"])
         elif agent == "commercial":
-            results["commercial"] = answer_commercial(user.company, state["question"])
+            results["commercial"] = answer_commercial(user.company, state["question"], machine)
         elif agent == "diagnosis":
             results["diagnosis"] = run_diagnosis(machine, state["question"])
     return {
@@ -166,8 +181,6 @@ def route_after_scope(state):
 def route_after_visibility(state):
     return "run_agents" if not state["refused"] else END
 
-# Empty Blue Print
-OrchestratorState = dict
 
 
 builder = StateGraph(OrchestratorState)      
