@@ -487,3 +487,50 @@ class DocChunk(models.Model):
 
     def __str__(self):
         return f"{self.source_file}  #{self.chunk_index}"
+
+
+
+
+class Conversation(models.Model):
+
+
+    user = models.ForeignKey(
+        "User",
+        on_delete=models.CASCADE,
+        related_name="conversations",
+    )
+    machine = models.ForeignKey(
+        "Machine",
+        on_delete=models.SET_NULL,
+        related_name="conversations",
+        null=True,
+        blank=True,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Conversation {self.conversation_id} ({self.user.username})"
+
+
+class Message(models.Model):
+    ROLE_USER = "user"
+    ROLE_ASSISTANT = "assistant"
+    ROLE_CHOICES = [
+        (ROLE_USER, "User"),
+        (ROLE_ASSISTANT, "Assistant"),
+    ]
+
+    conversation = models.ForeignKey(
+        "Conversation",
+        on_delete=models.CASCADE,
+        related_name="messages",
+    )
+    role = models.CharField(max_length=16, choices=ROLE_CHOICES)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at"]
+
+    def __str__(self):
+        return f"[{self.role}] {self.text[:40]}"
