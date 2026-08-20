@@ -68,10 +68,20 @@ def gather_commercial_data(company):
     return "\n".join(gathered_data)
 
 
-def answer_commercial(company, question):
+def answer_commercial(company, question, machine=None):
     """Commercial Agent: answer about the company's quotes and orders,
     including negotiation history and line-item detail."""
+
     data = gather_commercial_data(company)
+
+    machine_context = ""
+
+    if machine:
+        machine_context = (
+            f"\nThe user is currently viewing machine {machine.serial_number} "
+            f"({machine.machine_id}). If they say 'this machine' or don't name "
+            f"one explicitly, assume they mean this one.\n"
+        )
 
     system_prompt = (
         "You are a commercial assistant for AROL customers. "
@@ -97,7 +107,7 @@ def answer_commercial(company, question):
     )
 
     user_prompt = (
-        f"Commercial data for company {company.company_id}:\n\n"
+        f"Commercial data for company {company.company_id}:{machine_context}\n\n"
         f"{data}\n\n"
         f"Question: {question}"
     )
