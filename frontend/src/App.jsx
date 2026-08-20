@@ -165,15 +165,11 @@ function App() {
                   style={{ maxWidth: "85%" }}
                 >
                   <div className="card-body py-2 px-3">
-                    {m.agent && (
-                      <span
-                        className={`badge mb-2 ${
-                          m.refused ? "bg-danger" : "bg-info-subtle text-info-emphasis"
-                        }`}
-                      >
-                        {m.refused ? "⛔ Refused" : `🤖 ${m.agent}`}
-                      </span>
-                    )}
+                      {m.agents && m.agents.length > 0 && (
+                        <span className={`badge mb-2 ${m.refused ? "bg-danger" : "bg-info-subtle text-info-emphasis"}`}>
+                          {m.refused ? "⛔ Refused" : `🤖 ${m.agents.join(" + ")}`}
+                        </span>
+                      )}
                     <div className="markdown-body">
                       <ReactMarkdown>{m.answer}</ReactMarkdown>
                     </div>
