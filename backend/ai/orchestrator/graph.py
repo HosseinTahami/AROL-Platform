@@ -31,6 +31,7 @@ VISIBILITY_ALLOWED = {
 
 class OrchestratorState(TypedDict):
     question: str
+    history: list
     user_id: int
     machine_id: str
     refused: bool
@@ -39,6 +40,23 @@ class OrchestratorState(TypedDict):
     agent_results: dict
     final_answer: str
     trace: list
+
+
+def format_history(history):
+
+    """
+        Turn the recent conversation into
+        a short text block for prompts.
+    """
+
+    if not history:
+        return ""
+    lines = ["Recent conversation:"]
+    for h in history:
+        speaker = "User" if h["role"] == "user" else "Assistant"
+        lines.append(f"{speaker}: {h['text']}")
+    return "\n".join(lines) + "\n\n"
+
 
 
 def scope_check(state):
@@ -72,16 +90,29 @@ def planner(state):
         "(e.g. a diagnosis AND whether it's covered by warranty).\n"
         "Respond with ONLY a JSON list of the needed specialists, e.g. "
         '["diagnosis"] or ["diagnosis", "commercial"]. Nothing else.'
+        "A question may need MORE THAN ONE specialist if it spans domains "
+        "(e.g. a diagnosis AND whether it's covered by warranty).\n"
+        "If a recent conversation is included above the question, and the question "
+        "is a follow-up (e.g. 'what does that mean', 'why', 'what about X') that "
+        "refers to something the assistant said earlier, route based on which "
+        "specialist's DATA that earlier statement came from - not the surface "
+        "wording of the follow-up alone. For example, if the assistant previously "
+        "reported a live production rate or status (operational data) and the user "
+        "asks what it means, route to 'operational', not 'manuals', since the value "
+        "itself is not defined in the manual.\n"
     )
     response = ollama.chat(
         model=CHAT_MODEL,
         messages=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": state["question"]},
+            {"role": "user", "content": format_history(state.get("history", [])) + state["question"]},
         ],
         think=False,
     )
     raw = response["message"]["content"].strip()
+
+    print("PLANNER SEES:", format_history(state.get("history", [])) + state["question"])
+
     try:
         agents = json.loads(raw)
         agents = [a for a in agents if a in ("manuals", "operational", "commercial", "diagnosis")]
@@ -107,19 +138,21 @@ def visibility_check(state):
 
 
 def run_agents(state):
-    """Call every agent the planner selected, collect their results."""
     user = User.objects.get(id=state["user_id"])
     machine = Machine.objects.filter(machine_id=state["machine_id"]).first()
     results = {}
+    history_text = format_history(state.get("history", []))
+    question_with_context = history_text + state["question"]
+
     for agent in state["agents_to_call"]:
         if agent == "manuals":
-            results["manuals"] = answer_from_manual(machine, state["question"])
+            results["manuals"] = answer_from_manual(machine, question_with_context)
         elif agent == "operational":
-            results["operational"] = answer_operational(machine, state["question"])
+            results["operational"] = answer_operational(machine, question_with_context)
         elif agent == "commercial":
-            results["commercial"] = answer_commercial(user.company, state["question"], machine)
+            results["commercial"] = answer_commercial(user.company, question_with_context)
         elif agent == "diagnosis":
-            results["diagnosis"] = run_diagnosis(machine, state["question"])
+            results["diagnosis"] = run_diagnosis(machine, question_with_context)
     return {
         "agent_results": results,
         "trace": state["trace"] + [f"agents ran: {list(results.keys())}"],
