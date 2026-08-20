@@ -23,7 +23,17 @@ def run_orchestrator(user, machine, question):
 
 
 def judge(question, answer, reference):
-    """LLM-as-judge: score a generated answer against ground truth, 1-5."""
+
+
+    """
+        LLM-as-judge:
+          score a generated answer against ground truth.
+
+          1 - Poor
+          5 - Excellent
+    """
+
+
     system_prompt = (
         "You are grading an AI assistant's answer for correctness and faithfulness "
         "against a REFERENCE (ground truth). Score 1-5:\n"
@@ -32,16 +42,20 @@ def judge(question, answer, reference):
         "1 = incorrect or contains unsupported facts\n"
         'Respond with ONLY JSON: {"score": <1-5>, "reason": "<one sentence>"}'
     )
+
     user_prompt = f"Question: {question}\n\nReference: {reference}\n\nAnswer: {answer}"
+
     response = ollama.chat(
         model=JUDGE_MODEL,
         messages=[{"role": "system", "content": system_prompt},
                   {"role": "user", "content": user_prompt}],
         think=False,
     )
+
     try:
         result = json.loads(response["message"]["content"].strip())
         return int(result["score"]), result.get("reason", "")
+
     except (json.JSONDecodeError, KeyError, ValueError):
         return None, "judge output unparseable"
 
@@ -112,6 +126,7 @@ def eval_answer_quality(path):
 
 
 class Command(BaseCommand):
+    
     help = "Evaluate orchestrator routing and agent answer quality."
 
     def add_arguments(self, parser):
