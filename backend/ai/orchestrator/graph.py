@@ -168,10 +168,10 @@ def run_diagnosis(machine, question):
         if a.alarm_code.lower() in question.lower() or any(w in question.lower() for w in keywords):
             matched_code = a.alarm_code
             break
-    if matched_code is None and recent_alarms:
-        matched_code = recent_alarms[0].alarm_code
+
     if matched_code is None:
-        return {"answer": "This machine has no recorded alarms to diagnose.", "sources": []}
+        return answer_operational(machine, question)
+
     return diagnose_alarm(machine, matched_code)
 
 
