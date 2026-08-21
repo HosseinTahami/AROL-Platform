@@ -5,7 +5,7 @@ const API = "http://localhost:8001/api";
 
 function machineFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("machine"); // no fallback — returns null if absent
+  return params.get("machine");
 }
 
 function App() {
@@ -19,12 +19,10 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [me, setMe] = useState(null);
+  const [conversationId, setConversationId] = useState(null);
 
   useEffect(() => {
-    if (!token) {
-      setMe(null);
-      return;
-    }
+    if (!token) return setMe(null);
     fetch(`${API}/me/`, { headers: { Authorization: `Token ${token}` } })
       .then((res) => res.json())
       .then(setMe)
@@ -33,6 +31,7 @@ function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute("data-bs-theme", "dark");
+    document.body.style.minHeight = "100vh";
   }, []);
 
   useEffect(() => {
@@ -40,7 +39,7 @@ function App() {
       setMachineCheck(machineId ? null : { valid: false, reason: "none" });
       return;
     }
-    setMachineCheck(null); // show "checking" while the request is in flight
+    setMachineCheck(null);
     fetch(`${API}/machines/${machineId}/check/`, {
       headers: { Authorization: `Token ${token}` },
     })
@@ -70,6 +69,8 @@ function App() {
     localStorage.removeItem("token");
     setToken(null);
     setMessages([]);
+    setConversationId(null);
+    setMe(null);
   }
 
   async function ask() {
@@ -85,9 +86,14 @@ function App() {
           "Content-Type": "application/json",
           Authorization: `Token ${token}`,
         },
-        body: JSON.stringify({ question: myQuestion, machine_id: machineId }),
+        body: JSON.stringify({
+          question: myQuestion,
+          machine_id: machineId,
+          conversation_id: conversationId,
+        }),
       });
       const data = await res.json();
+      if (data.conversation_id) setConversationId(data.conversation_id);
       setMessages((m) => [...m, { role: "assistant", ...data }]);
     } catch {
       setMessages((m) => [
@@ -98,56 +104,64 @@ function App() {
     setLoading(false);
   }
 
-const Navbar = () => (
-  <nav className="navbar navbar-expand px-4 mb-4 border-bottom">
-    <span className="navbar-brand fw-bold">
-      <span className="text-primary">AROL</span> Assistant
-    </span>
-    <div className="ms-auto d-flex align-items-center gap-2">
-      {token && machineId && (
-        <span className="badge bg-secondary">Machine: {machineId}</span>
-      )}
-
-      {token && me && (
-        <div className="position-relative" style={{ cursor: "default" }}
-             onMouseEnter={(e) => e.currentTarget.querySelector(".profile-popover").style.display = "block"}
-             onMouseLeave={(e) => e.currentTarget.querySelector(".profile-popover").style.display = "none"}>
-          <span className="badge bg-primary-subtle text-primary-emphasis">
-             {me.first_name}
-          </span>
+  const Navbar = () => (
+    <nav
+      className="navbar px-4 border-bottom flex-shrink-0"
+      style={{ height: 56 }}
+    >
+      <span className="navbar-brand fw-bold mb-0">
+        <span className="text-primary">AROL</span> Assistant
+      </span>
+      <div className="ms-auto d-flex align-items-center gap-2">
+        {token && machineId && (
+          <span className="badge text-bg-secondary">Machine: {machineId}</span>
+        )}
+        {token && me && (
           <div
-            className="profile-popover card shadow-sm position-absolute end-0 mt-1"
-            style={{ display: "none", zIndex: 1000, minWidth: 220 }}
+            className="position-relative"
+            onMouseEnter={(e) =>
+              (e.currentTarget.querySelector(".profile-popover").style.display = "block")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.querySelector(".profile-popover").style.display = "none")
+            }
           >
-            <div className="card-body py-2 px-3">
-              <div className="fw-semibold">{me.first_name} {me.last_name}</div>
-              <div className="small text-muted">{me.email}</div>
-              <div className="small mt-1">
-                <span className="badge bg-info-subtle text-info-emphasis">
-                  {me.visibility}
-                </span>
-                {me.company && <span className="ms-1 small text-muted">{me.company}</span>}
+            <span className="badge text-bg-primary" style={{ cursor: "default" }}>
+              {me.first_name}
+            </span>
+            <div
+              className="profile-popover card shadow position-absolute end-0 mt-2"
+              style={{ display: "none", zIndex: 1000, minWidth: 230 }}
+            >
+              <div className="card-body py-2 px-3">
+                <div className="fw-semibold">
+                  {me.first_name} {me.last_name}
+                </div>
+                <div className="small text-muted">{me.email}</div>
+                <div className="d-flex align-items-center gap-2 mt-2">
+                  <span className="badge text-bg-info">{me.visibility}</span>
+                  {me.company && <span className="small text-muted">{me.company}</span>}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+        {token && (
+          <button className="btn btn-outline-danger btn-sm" onClick={logout}>
+            Log out
+          </button>
+        )}
+      </div>
+    </nav>
+  );
 
-      {token && (
-        <button className="btn btn-outline-danger btn-sm" onClick={logout}>
-          Log out
-        </button>
-      )}
-    </div>
-  </nav>
-);
   // ---- Login screen ----
   if (!token) {
     return (
-      <>
+      <div className="d-flex flex-column vh-100">
         <Navbar />
-        <div className="container" style={{ maxWidth: 420 }}>
-          <div className="card shadow-sm mt-4">
+        <div className="d-flex align-items-center justify-content-center flex-grow-1">
+          <div className="card shadow" style={{ width: 380 }}>
             <div className="card-body p-4">
               <h4 className="card-title mb-4 text-center">Sign in</h4>
               <input
@@ -167,26 +181,26 @@ const Navbar = () => (
               <button className="btn btn-primary w-100" onClick={login}>
                 Log in
               </button>
-              {error && <div className="alert alert-danger mt-3 mb-0">{error}</div>}
+              {error && <div className="alert alert-danger mt-3 mb-0 py-2">{error}</div>}
             </div>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 
   // ---- Machine-gated chat screen ----
   return (
-    <>
+    <div className="d-flex flex-column vh-100">
       <Navbar />
 
       {machineCheck === null ? (
-        <div className="container" style={{ maxWidth: 600 }}>
-          <p className="text-muted mt-4">Checking machine…</p>
+        <div className="d-flex align-items-center justify-content-center flex-grow-1 text-muted">
+          Checking machine…
         </div>
       ) : !machineCheck.valid ? (
-        <div className="container" style={{ maxWidth: 600 }}>
-          <div className="alert alert-warning mt-4">
+        <div className="d-flex align-items-center justify-content-center flex-grow-1">
+          <div className="alert alert-warning mb-0" style={{ maxWidth: 480 }}>
             {machineCheck.reason === "not_found" && "This machine was not found."}
             {machineCheck.reason === "not_yours" &&
               "This machine does not belong to your company."}
@@ -197,89 +211,104 @@ const Navbar = () => (
           </div>
         </div>
       ) : (
-        <div className="container" style={{ maxWidth: 820 }}>
-          <div
-            className="d-flex flex-column gap-3 mb-3 p-2"
-            style={{ minHeight: 380, maxHeight: 520, overflowY: "auto" }}
-          >
-            {messages.length === 0 && (
-              <div className="text-muted text-center my-auto">
-                <div style={{ fontSize: 40 }}>💬</div>
-                Ask about manuals, alarms, or orders for {machineId}.
-              </div>
-            )}
-
-            {messages.map((m, i) =>
-              m.role === "user" ? (
-                <div key={i} className="d-flex justify-content-end">
-                  <div
-                    className="bg-primary text-white rounded-4 px-3 py-2"
-                    style={{ maxWidth: "75%", whiteSpace: "pre-wrap" }}
-                  >
-                    {m.text}
-                  </div>
+        <div className="d-flex flex-column flex-grow-1 overflow-hidden">
+          {/* Message list — fills all available space, scrolls independently */}
+          <div className="flex-grow-1 overflow-auto">
+            <div
+              className="d-flex flex-column gap-3 px-3 py-4 mx-auto"
+              style={{ maxWidth: 780 }}
+            >
+              {messages.length === 0 && (
+                <div className="text-muted text-center mt-5">
+                  <div style={{ fontSize: 42 }}>💬</div>
+                  Ask about manuals, alarms, or orders for {machineId}.
                 </div>
-              ) : (
-                <div key={i} className="d-flex justify-content-start">
-                  <div className="card rounded-4 shadow-sm" style={{ maxWidth: "85%" }}>
-                    <div className="card-body py-2 px-3">
-                      {m.agents && m.agents.length > 0 && (
-                        <span
-                          className={`badge mb-2 ${
-                            m.refused ? "bg-danger" : "bg-info-subtle text-info-emphasis"
-                          }`}
-                        >
-                          {m.refused ? "⛔ Refused" : `🤖 ${m.agents.join(" + ")}`}
-                        </span>
-                      )}
-                      <div className="markdown-body">
-                        <ReactMarkdown>{m.answer}</ReactMarkdown>
+              )}
+
+              {messages.map((m, i) =>
+                m.role === "user" ? (
+                  <div key={i} className="d-flex justify-content-end">
+                    <div
+                      className="bg-primary text-white rounded-4 px-3 py-2"
+                      style={{ maxWidth: "72%", whiteSpace: "pre-wrap", textAlign: "left" }}
+                    >
+                      {m.text}
+                    </div>
+                  </div>
+                ) : (
+                  <div key={i} className="d-flex justify-content-start">
+                    <div
+                      className="card border-0 shadow-sm rounded-4"
+                      style={{ maxWidth: "80%", textAlign: "left" }}
+                    >
+                      <div className="card-body py-2 px-3">
+                        {m.agents && m.agents.length > 0 && (
+                          <span
+                            className={`badge mb-2 ${
+                              m.refused ? "text-bg-danger" : "text-bg-info"
+                            }`}
+                          >
+                            {m.refused ? "⛔ Refused" : `🤖 ${m.agents.join(" + ")}`}
+                          </span>
+                        )}
+                        <div className="chat-markdown" style={{ textAlign: "left" }}>
+                          <ReactMarkdown>{m.answer}</ReactMarkdown>
+                        </div>
+                        {m.sources && m.sources.length > 0 && (
+                          <p className="mt-2 mb-0 small text-muted border-top pt-2">
+                            📄 Sources: {m.sources.map((s) => `p.${s.page}`).join(", ")}
+                          </p>
+                        )}
                       </div>
-                      {m.sources && m.sources.length > 0 && (
-                        <p className="mt-2 mb-0 small text-muted border-top pt-2">
-                          📄 Sources: {m.sources.map((s) => `p.${s.page}`).join(", ")}
-                        </p>
-                      )}
+                    </div>
+                  </div>
+                )
+              )}
+
+              {loading && (
+                <div className="d-flex justify-content-start">
+                  <div className="card border-0 shadow-sm rounded-4">
+                    <div className="card-body py-2 px-3 text-muted">
+                      <span className="spinner-border spinner-border-sm me-2" />
+                      Thinking…
                     </div>
                   </div>
                 </div>
-              )
-            )}
-
-            {loading && (
-              <div className="d-flex justify-content-start">
-                <div className="card rounded-4 shadow-sm">
-                  <div className="card-body py-2 px-3 text-muted">
-                    <span className="spinner-border spinner-border-sm me-2" />
-                    Thinking…
-                  </div>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
-          <div className="input-group input-group-lg mb-4">
-            <textarea
-              className="form-control"
-              rows={1}
-              placeholder="Type your question…"
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  ask();
-                }
-              }}
-              style={{ resize: "none" }}
-            />
-            <button className="btn btn-primary px-4" onClick={ask} disabled={loading}>
-              Send
-            </button>
+          {/* Input bar — pinned to the bottom */}
+          <div className="border-top flex-shrink-0 py-3">
+            <div className="mx-auto px-3" style={{ maxWidth: 780 }}>
+              <div className="input-group input-group-lg">
+                <textarea
+                  className="form-control"
+                  rows={1}
+                  placeholder="Type your question…"
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      ask();
+                    }
+                  }}
+                  style={{ resize: "none" }}
+                />
+                <button
+                  className="btn btn-primary px-4"
+                  onClick={ask}
+                  disabled={loading}
+                >
+                  Send
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 
