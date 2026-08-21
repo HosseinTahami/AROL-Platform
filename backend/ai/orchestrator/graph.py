@@ -111,7 +111,6 @@ def planner(state):
     )
     raw = response["message"]["content"].strip()
 
-    print("PLANNER SEES:", format_history(state.get("history", [])) + state["question"])
 
     try:
         agents = json.loads(raw)
