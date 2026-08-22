@@ -5,7 +5,7 @@
   },
   {
     "question": "What does the low air pressure alarm mean, and what maintenance has been done on this machine recently?",
-    "expected_agents": ["manuals", "operational"]
+    "expected_agents": ["diagnosis", "operational"]
   },
   {
     "question": "Is there an open order for this machine, and why does it keep raising the same alarm?",
