@@ -19,6 +19,8 @@ def gather_operational_data(machine):
     
     """
 
+
+
     gathered_data = [f"Machine {machine.serial_number} ({machine.machine_id})",
              f"Configuration: {machine.configuration_profile}", ""]
 
@@ -27,7 +29,7 @@ def gather_operational_data(machine):
     gathered_data.append(f"RECENT ALARMS ({alarms.count()} shown):")
 
     for alarm in alarms:
-        gathered_data.append(f"- {alarm.alarm_code} | {alarm.severity} | {alarm.alarm_status} | {alarm.timestamp}")
+        gathered_data.append(f"- ID: {alarm.alarm_id} | Code: {alarm.alarm_code} | Severity: {alarm.severity} | Status: {alarm.alarm_status} | Time: {alarm.timestamp}")
 
     latest = TelemetrySnapshot.objects.filter(machine=machine).order_by("-timestamp").first()
 
@@ -139,7 +141,11 @@ def answer_operational(machine, question):
         "and the manual guidance section if present. "
         "Be concise and specific. Reference alarm codes and ticket IDs. "
         "Write directly to the user; never mention that data was 'provided' or "
-        "'available to you'."
+        "'available to you'. "
+        "When the question references a specific ID (e.g. an alarm ID like 'ALM-0016' or a "
+        "ticket ID), find that EXACT ID in the data before answering. Do not answer about a "
+        "different ID, and do not claim an ID doesn't exist without checking the full list "
+        "of IDs shown to you. "
     )
 
     user_prompt = f"{data}{diagnosis_context}\n\nQuestion: {question}"
