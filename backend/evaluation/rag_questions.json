@@ -1,282 +1,282 @@
 [
   {
-    "question": "What are the specific restrictions regarding reproduction or modification of this manual?",
-    "chunk_id": 3808,
-    "machine_serial": "A2055",
-    "source_file": "A2055_manual_EN.pdf",
-    "page": 4
-  },
-  {
-    "question": "What are the four specific intervals of working hours defined for maintenance schedules between section 11.5.1.4 and 11.5.1.8?",
-    "chunk_id": 2777,
-    "machine_serial": "17478",
-    "source_file": "17478_manual_EN.pdf",
-    "page": 8
-  },
-  {
-    "question": "Who is legally responsible for the use of the closing machine?",
-    "chunk_id": 4702,
-    "machine_serial": "A4344",
-    "source_file": "A4344_manual_EN.pdf",
-    "page": 21
-  },
-  {
-    "question": "Qual \u00e8 l'indicazione specifica che suggerisce una velocit\u00e0 di rotazione della testa troppo alta durante il processo di chiusura?",
-    "chunk_id": 4205,
+    "question": "How does the pick and place system transfer a container under the capping head?",
+    "chunk_id": 7170,
     "machine_serial": "A2064",
     "source_file": "A2064_manual_EN.pdf",
+    "page": 12
+  },
+  {
+    "question": "What are the pitch diameter and number of heads for an AROL TS model with serial number 15610?",
+    "chunk_id": 5003,
+    "machine_serial": "15610",
+    "source_file": "15610_manual_EN.pdf",
+    "page": 1
+  },
+  {
+    "question": "Which tool is used to remove the O-rings from their seat during a closure chuck overhaul?",
+    "chunk_id": 7386,
+    "machine_serial": "A2064",
+    "source_file": "A2064_manual_EN.pdf",
+    "page": 95
+  },
+  {
+    "question": "If the head rotation is too high resulting in additional clicks before bottle exit that may cut the cap, what adjustment should be made?",
+    "chunk_id": 6990,
+    "machine_serial": "A2055",
+    "source_file": "A2055_manual_EN.pdf",
     "page": 41
   },
   {
-    "question": "How must faults be researched according to AROL S.p.A.'s recommended methodology?",
-    "chunk_id": 2711,
-    "machine_serial": "17203",
-    "source_file": "17203_manual_EN.pdf",
-    "page": 144
+    "question": "How do you remove the passage plane (J) after unscrewing nuts (CC)?",
+    "chunk_id": 7232,
+    "machine_serial": "A2064",
+    "source_file": "A2064_manual_EN.pdf",
+    "page": 31
   },
   {
-    "question": "What are the specific intervals and general indications for maintenance of the closing machine?",
-    "chunk_id": 4647,
+    "question": "What type of grease is indicated for lubricating machines under category A according to the table in section 3?",
+    "chunk_id": 7014,
+    "machine_serial": "A2055",
+    "source_file": "A2055_manual_EN.pdf",
+    "page": 51
+  },
+  {
+    "question": "Who is responsible for installing the closing machine in accordance with European Community directives?",
+    "chunk_id": 6563,
+    "machine_serial": "17579",
+    "source_file": "17579_manual_EN.pdf",
+    "page": 18
+  },
+  {
+    "question": "How do you ensure the roller holder arms can be reinstalled in their original position?",
+    "chunk_id": 6769,
+    "machine_serial": "17579",
+    "source_file": "17579_manual_EN.pdf",
+    "page": 105
+  },
+  {
+    "question": "According to the passage, what specific information must customers arrange for charged workers regarding each piece of work equipment they use?",
+    "chunk_id": 7189,
+    "machine_serial": "A2064",
+    "source_file": "A2064_manual_EN.pdf",
+    "page": 18
+  },
+  {
+    "question": "What components must be replaced if a container format change is required?",
+    "chunk_id": 7332,
+    "machine_serial": "A2064",
+    "source_file": "A2064_manual_EN.pdf",
+    "page": 66
+  },
+  {
+    "question": "What specific action should be taken with the handle of the hexagonal wrench if the closure chuck is found to be locked during removal?",
+    "chunk_id": 7856,
     "machine_serial": "A4344",
     "source_file": "A4344_manual_EN.pdf",
-    "page": 6
+    "page": 69
   },
   {
-    "question": "Before starting up the machine, what specific checks should be performed to prevent errors or accidents?",
-    "chunk_id": 4196,
-    "machine_serial": "A2064",
-    "source_file": "A2064_manual_EN.pdf",
-    "page": 38
-  },
-  {
-    "question": "What should be done when the system displays \"9 ERROR 20 SAFETY CIRCUIT 10 WAITING FOR PROFIBUS ACTIVATION\"?",
-    "chunk_id": 2983,
+    "question": "Which Allen wrench size is required to unscrew the locking grub screw?",
+    "chunk_id": 6355,
     "machine_serial": "17478",
     "source_file": "17478_manual_EN.pdf",
-    "page": 82
+    "page": 210
   },
   {
-    "question": "Who is authorized to perform routine or extraordinary maintenance interventions on the closing machine?",
-    "chunk_id": 2902,
-    "machine_serial": "17478",
-    "source_file": "17478_manual_EN.pdf",
-    "page": 50
+    "question": "Where should this AROL machine not be operated according to Section 13.2?",
+    "chunk_id": 6931,
+    "machine_serial": "A2055",
+    "source_file": "A2055_manual_EN.pdf",
+    "page": 22
   },
   {
-    "question": "How does the gear-box type affect the lubricant fill quantity according to section 11.6.8.7?",
-    "chunk_id": 3367,
-    "machine_serial": "17478",
-    "source_file": "17478_manual_EN.pdf",
-    "page": 241
-  },
-  {
-    "question": "How is the frequency of cleaning operations for the closing machine determined based on continuous use?",
-    "chunk_id": 2118,
+    "question": "What action is required for mineral oils if they have not been used for over six months?",
+    "chunk_id": 5330,
     "machine_serial": "15610",
     "source_file": "15610_manual_EN.pdf",
-    "page": 53
+    "page": 129
   },
   {
-    "question": "Does CLOSYS S.r.l. undertake any responsibility for errors or omissions in this manual?",
-    "chunk_id": 4125,
-    "machine_serial": "A2064",
-    "source_file": "A2064_manual_EN.pdf",
-    "page": 16
-  },
-  {
-    "question": "What is one required characteristic for machine operators to ensure they can correctly read and interpret drawings?",
-    "chunk_id": 4127,
-    "machine_serial": "A2064",
-    "source_file": "A2064_manual_EN.pdf",
-    "page": 17
-  },
-  {
-    "question": "What is the page number where information about oil replacement can be found in the manual?",
-    "chunk_id": 2789,
-    "machine_serial": "17478",
-    "source_file": "17478_manual_EN.pdf",
-    "page": 10
-  },
-  {
-    "question": "What is the required procedure for a first intervention on an AROL machine according to the scale method?",
-    "chunk_id": 4368,
-    "machine_serial": "A2064",
-    "source_file": "A2064_manual_EN.pdf",
-    "page": 110
-  },
-  {
-    "question": "Where is the Lubricant Cartridge located within the machine's lubrication system?",
-    "chunk_id": 1980,
-    "machine_serial": "15610",
-    "source_file": "15610_manual_EN.pdf",
-    "page": 7
-  },
-  {
-    "question": "What action should a technician take if the closure head springs are not working?",
-    "chunk_id": 3420,
-    "machine_serial": "17478",
-    "source_file": "17478_manual_EN.pdf",
-    "page": 259
-  },
-  {
-    "question": "What steps should be taken to replace a piston position spacer suitable for a specific container format?",
-    "chunk_id": 4805,
-    "machine_serial": "A4344",
-    "source_file": "A4344_manual_EN.pdf",
+    "question": "What temperature of oil does it recommend operating with for a discharge operation?",
+    "chunk_id": 7044,
+    "machine_serial": "A2055",
+    "source_file": "A2055_manual_EN.pdf",
     "page": 63
   },
   {
-    "question": "What is the re-ordering code for the closing machine figure labeled as Fig. 11?",
-    "chunk_id": 2438,
-    "machine_serial": "17203",
-    "source_file": "17203_manual_EN.pdf",
-    "page": 25
-  },
-  {
-    "question": "How should you align the magnet adjustment ring-nut after unscrewing the fixing dowel?",
-    "chunk_id": 2185,
-    "machine_serial": "15610",
-    "source_file": "15610_manual_EN.pdf",
-    "page": 90
-  },
-  {
-    "question": "Before starting the machine up, what checks must be performed at the end of maintenance interventions?",
-    "chunk_id": 4090,
-    "machine_serial": "A2064",
-    "source_file": "A2064_manual_EN.pdf",
+    "question": "Where can I find the section on verification of correct phase sequence?",
+    "chunk_id": 5806,
+    "machine_serial": "17478",
+    "source_file": "17478_manual_EN.pdf",
     "page": 5
   },
   {
-    "question": "How many degrees should you adjust or reverse the adjustment of the threading roller bush for a further delicate calibration?",
-    "chunk_id": 3654,
+    "question": "To access the area protected by a guard, what safety procedure must be performed regarding power sources?",
+    "chunk_id": 5947,
+    "machine_serial": "17478",
+    "source_file": "17478_manual_EN.pdf",
+    "page": 43
+  },
+  {
+    "question": "What standard should means used before accessing high levels adhere to?",
+    "chunk_id": 6607,
     "machine_serial": "17579",
     "source_file": "17579_manual_EN.pdf",
-    "page": 84
+    "page": 30
   },
   {
-    "question": "When restarting an unused closing machine after more than one month of inactivity, what two specific maintenance actions must be performed before operation?",
-    "chunk_id": 4776,
-    "machine_serial": "A4344",
-    "source_file": "A4344_manual_EN.pdf",
-    "page": 47
-  },
-  {
-    "question": "What is the difference between NSF-H1 and NSF-H2 type-approvals?",
-    "chunk_id": 2664,
+    "question": "What is the part number of the central column inner bearing?",
+    "chunk_id": 5746,
     "machine_serial": "17203",
     "source_file": "17203_manual_EN.pdf",
-    "page": 127
+    "page": 132
   },
   {
-    "question": "What must you do if the available piston position spacers are not suitable for the specific format of container being processed?",
-    "chunk_id": 4804,
-    "machine_serial": "A4344",
-    "source_file": "A4344_manual_EN.pdf",
-    "page": 63
+    "question": "What is the weighted average sound pressure level when no specific noise emission data has been determined?",
+    "chunk_id": 5939,
+    "machine_serial": "17478",
+    "source_file": "17478_manual_EN.pdf",
+    "page": 41
   },
   {
-    "question": "What are the professional roles of users defined in section 4.4.4?",
-    "chunk_id": 4628,
+    "question": "Which two connections are required for setting up the pneumatic installation according to section 8.8?",
+    "chunk_id": 6003,
+    "machine_serial": "17478",
+    "source_file": "17478_manual_EN.pdf",
+    "page": 67
+  },
+  {
+    "question": "What is the approximate replacement interval for electrical safety components in an AROL machine?",
+    "chunk_id": 5516,
+    "machine_serial": "17203",
+    "source_file": "17203_manual_EN.pdf",
+    "page": 30
+  },
+  {
+    "question": "What safety step must be taken before inspecting alignment if the transfer star-wheel and closure head centers do not align?",
+    "chunk_id": 5379,
+    "machine_serial": "15610",
+    "source_file": "15610_manual_EN.pdf",
+    "page": 148
+  },
+  {
+    "question": "How does a technician switch the closing machine between automatic (AUT) and manual (MAN) operating modes?",
+    "chunk_id": 5894,
+    "machine_serial": "17478",
+    "source_file": "17478_manual_EN.pdf",
+    "page": 25
+  },
+  {
+    "question": "What tools are needed for the removal and maintenance of the closure chuck?",
+    "chunk_id": 7162,
+    "machine_serial": "A2064",
+    "source_file": "A2064_manual_EN.pdf",
+    "page": 8
+  },
+  {
+    "question": "What should be done if rubber sphere seal rings are worn or the seats of the spheres are dirty?",
+    "chunk_id": 7425,
+    "machine_serial": "A2064",
+    "source_file": "A2064_manual_EN.pdf",
+    "page": 113
+  },
+  {
+    "question": "What responsibilities must the customer fulfill regarding instructions for workers under P.P.M. use?",
+    "chunk_id": 6918,
+    "machine_serial": "A2055",
+    "source_file": "A2055_manual_EN.pdf",
+    "page": 18
+  },
+  {
+    "question": "How can you correct the situation if a cap is not correctly shifted by the nozzles?",
+    "chunk_id": 6703,
+    "machine_serial": "17579",
+    "source_file": "17579_manual_EN.pdf",
+    "page": 75
+  },
+  {
+    "question": "According to the provided table, what is the base thickener composition for Klubersynth?",
+    "chunk_id": 6806,
+    "machine_serial": "17579",
+    "source_file": "17579_manual_EN.pdf",
+    "page": 123
+  },
+  {
+    "question": "How do you exit the date and time adjustment page after making changes?",
+    "chunk_id": 6031,
+    "machine_serial": "17478",
+    "source_file": "17478_manual_EN.pdf",
+    "page": 78
+  },
+  {
+    "question": "According to section 11.6.5, what specific consequence does AROL S.p.A. warn may occur if all indicated points are not periodically lubricated?",
+    "chunk_id": 6392,
+    "machine_serial": "17478",
+    "source_file": "17478_manual_EN.pdf",
+    "page": 228
+  },
+  {
+    "question": "How can a technician vary the value V between mA using the unit of measurement?",
+    "chunk_id": 6165,
+    "machine_serial": "17478",
+    "source_file": "17478_manual_EN.pdf",
+    "page": 122
+  },
+  {
+    "question": "How do I install the caps chute?",
+    "chunk_id": 7674,
     "machine_serial": "A4344",
     "source_file": "A4344_manual_EN.pdf",
     "page": 4
   },
   {
-    "question": "What actions must the customer ensure regarding training for personnel who will operate AROL equipment?",
-    "chunk_id": 4138,
-    "machine_serial": "A2064",
-    "source_file": "A2064_manual_EN.pdf",
-    "page": 19
-  },
-  {
-    "question": "What tool is required to unscrew the centering device's support columns?",
-    "chunk_id": 2624,
-    "machine_serial": "17203",
-    "source_file": "17203_manual_EN.pdf",
-    "page": 107
-  },
-  {
-    "question": "How do you install the caps guide sectors onto the base disk according to section 168?",
-    "chunk_id": 3222,
-    "machine_serial": "17478",
-    "source_file": "17478_manual_EN.pdf",
-    "page": 179
-  },
-  {
-    "question": "What is the maximum recommended maintenance interval in days for an engine operating at 500 hours per month under a three-shift working schedule?",
-    "chunk_id": 4854,
+    "question": "How do you replace the bottle supporting plate?",
+    "chunk_id": 7852,
     "machine_serial": "A4344",
     "source_file": "A4344_manual_EN.pdf",
-    "page": 91
+    "page": 66
   },
   {
-    "question": "According to the text, what responsibility does the employer have regarding Personal Protection Means (PP) for operations related to the useful life of the closing machine?",
-    "chunk_id": 4710,
-    "machine_serial": "A4344",
-    "source_file": "A4344_manual_EN.pdf",
-    "page": 22
-  },
-  {
-    "question": "What does the symbol associated with \"Obligation to insulate all energy sources\" indicate?",
-    "chunk_id": 3519,
+    "question": "Which tools are listed as necessary for the adjustment of an \"SSD\" closure head?",
+    "chunk_id": 6705,
     "machine_serial": "17579",
     "source_file": "17579_manual_EN.pdf",
-    "page": 22
+    "page": 76
   },
   {
-    "question": "What should be checked at every 1000 working hours regarding the closure chuck?",
-    "chunk_id": 2208,
-    "machine_serial": "15610",
-    "source_file": "15610_manual_EN.pdf",
-    "page": 99
-  },
-  {
-    "question": "How should a technician check for heavy contamination of the oil before deciding on replacement?",
-    "chunk_id": 3352,
-    "machine_serial": "17478",
-    "source_file": "17478_manual_EN.pdf",
-    "page": 236
-  },
-  {
-    "question": "What should a technician do if they find fragments inside the closure gripper?",
-    "chunk_id": 3417,
-    "machine_serial": "17478",
-    "source_file": "17478_manual_EN.pdf",
-    "page": 258
-  },
-  {
-    "question": "Before carrying out operations on the closing machine during testing, which sub-chapter describes where to find instructions for installing and activating the lubricant cartridge?",
-    "chunk_id": 2483,
-    "machine_serial": "17203",
-    "source_file": "17203_manual_EN.pdf",
-    "page": 43
-  },
-  {
-    "question": "Where are the removal and installation instructions for SSD heads located in this manual section?",
-    "chunk_id": 3450,
+    "question": "According to Table 11.1.2, what is the maintenance interval in hours for a machine operating three shifts that requires inspection every two weeks?",
+    "chunk_id": 6744,
     "machine_serial": "17579",
     "source_file": "17579_manual_EN.pdf",
-    "page": 5
+    "page": 95
   },
   {
-    "question": "When does an operator gain permission to operate inside or around a closing machine?",
-    "chunk_id": 2867,
+    "question": "What specific characteristic must machine operators possess to correctly interpret drawings, schemes, and symbols on an AROL machine?",
+    "chunk_id": 7472,
+    "machine_serial": "A2132",
+    "source_file": "A2132_manual_EN.pdf",
+    "page": 15
+  },
+  {
+    "question": "How should the AUT/MAN switch be positioned before releasing the handles that fasten the anti-torsion columns?",
+    "chunk_id": 6176,
     "machine_serial": "17478",
     "source_file": "17478_manual_EN.pdf",
-    "page": 38
+    "page": 127
   },
   {
-    "question": "What are the recommended cleaning intervals for the closing machine?",
-    "chunk_id": 4637,
+    "question": "To access the area protected by a fixed guard on a closing machine, what safety step must be taken regarding power sources?",
+    "chunk_id": 5509,
+    "machine_serial": "17203",
+    "source_file": "17203_manual_EN.pdf",
+    "page": 28
+  },
+  {
+    "question": "What size Allen wrench is required to loosen the fixing grub screws when replacing the head rotation motor belt?",
+    "chunk_id": 8016,
     "machine_serial": "A4344",
     "source_file": "A4344_manual_EN.pdf",
-    "page": 5
-  },
-  {
-    "question": "Before starting the turret up, what should a technician do regarding all machine components?",
-    "chunk_id": 3922,
-    "machine_serial": "A2055",
-    "source_file": "A2055_manual_EN.pdf",
-    "page": 39
+    "page": 147
   }
 ]

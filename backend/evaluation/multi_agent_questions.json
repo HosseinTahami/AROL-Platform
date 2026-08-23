@@ -26,5 +26,37 @@
   {
     "question": "What was the latest quote revision for this machine, and does the manual say anything about the components it added?",
     "expected_agents": ["commercial", "manuals"]
+  },
+  {
+    "question": "Machine MCH-0002 has alarm ALM-0099 open on the caps sorter door - is this related to the scheduled maintenance ticket TCK-0047, and what should the technician check?",
+    "expected_agents": ["diagnosis", "operational"]
+  },
+  {
+    "question": "Ticket TCK-0018 is an open on-site service for MCH-0001 - is this covered under the existing quote QTE-2025-0001, or would it need a new order?",
+    "expected_agents": ["operational", "commercial"]
+  },
+  {
+    "question": "MCH-0004 has a height-limit alarm open and quote QTE-2025-0004 covers wearing part kits - do the wearing parts in that quote address this alarm?",
+    "expected_agents": ["diagnosis", "commercial"]
+  },
+  {
+    "question": "For MCH-0006, alarm ALM-0169 (heads motor overload) is currently open and there's a remote troubleshooting ticket TCK-0006 - what does the manual say the likely mechanical cause is, and has this alarm happened before?",
+    "expected_agents": ["diagnosis", "operational"]
+  },
+  {
+    "question": "MCH-0007's overhaul ticket TCK-0016 is high priority and there's a general overhaul quote QTE-2025-0003 for this line - is the overhaul ticket part of that quoted work, or a separate, unbilled issue?",
+    "expected_agents": ["operational", "commercial"]
+  },
+  {
+    "question": "Order ORD-2025-0005 was closed for this company - now that the machines are running, what should I check if MCH-0008's outfeed starwheel sensor alarm comes back?",
+    "expected_agents": ["commercial", "diagnosis"]
+  },
+  {
+    "question": "What is the procedure in the manual for clearing an entrance tunnel alarm, and is MCH-0003's current ALM-0114 alarm still active?",
+    "expected_agents": ["manuals", "operational"]
+  },
+  {
+    "question": "Before we approve the wearing-part-kit quote for MCH-0005, can you confirm the machine currently has an open caps storage tank alarm that the kit would address?",
+    "expected_agents": ["commercial", "diagnosis"]
   }
 ]
