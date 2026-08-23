@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from core.models import Machine, DocChunk
 
 from pathlib import Path
-import ollama, pypdf
+import ollama, pypdf, pdfplumber
 
 
 
@@ -53,35 +53,24 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("Manual ingestion complete."))
 
     def ingest_pdf(self, pdf_path, machine):
-        reader = pypdf.PdfReader(str(pdf_path))
         chunk_index = 0
 
-        for page_num, page in enumerate(reader.pages, start=1):
-            """
-                If a page has no text, then if will 
-                give us "", rather than None.
-            """
-            text = page.extract_text() or ""
-
-            chunks_of_text = self.chunk_page(text)
-
-            for chunk_text in chunks_of_text:
-
-                embedding = ollama.embeddings(
-                    model="nomic-embed-text",
-                    prompt=chunk_text
-                )["embedding"]
-
-                DocChunk.objects.create(
-                    machine=machine,
-                    source_file=pdf_path.name,
-                    page_num=page_num,
-                    chunk_index=chunk_index,
-                    content=chunk_text,
-                    embedding=embedding,
-                )
-
-                chunk_index += 1
+        with pdfplumber.open(str(pdf_path)) as pdf:
+            for page_num, page in enumerate(pdf.pages, start=1):
+                text = page.extract_text() or ""
+                for chunk_text in self.chunk_page(text):
+                    embedding = ollama.embeddings(
+                        model="nomic-embed-text", prompt=chunk_text
+                    )["embedding"]
+                    DocChunk.objects.create(
+                        machine=machine,
+                        source_file=pdf_path.name,
+                        page_num=page_num,
+                        chunk_index=chunk_index,
+                        content=chunk_text,
+                        embedding=embedding,
+                    )
+                    chunk_index += 1
 
         self.stdout.write(self.style.SUCCESS(
             f"  {pdf_path.name} -> {machine.serial_number}: {chunk_index} chunks"))
