@@ -102,7 +102,7 @@ to the matching machine. Re-runnable (old chunks are replaced).
 Start three processes:
 
 ```bash
-ollama serve                      # if not already running
+ollama serve                      
 
 cd backend && python manage.py runserver 8001
 
