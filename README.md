@@ -186,5 +186,4 @@ AROL-Platform/
   frontend/            React + Vite chat interface
   evaluation/          frozen benchmark question sets
   README.md
-  DOCUMENTATION.md
 ```
