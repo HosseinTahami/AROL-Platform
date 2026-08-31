@@ -509,7 +509,7 @@ class Conversation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Conversation {self.conversation_id} ({self.user.username})"
+        return f"Conversation {self.id} ({self.user.username})"
 
 
 class Message(models.Model):
