@@ -533,4 +533,4 @@ class Message(models.Model):
         ordering = ["created_at"]
 
     def __str__(self):
-        return f"[{self.role}] {self.text[:40]}"
+        return f"{self.conversation.id}- [{self.role}] {self.text[:40]}"
