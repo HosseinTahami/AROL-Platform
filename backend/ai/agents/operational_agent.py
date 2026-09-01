@@ -118,10 +118,8 @@ def answer_operational(machine, question):
 
     for a in recent_alarms:
 
-        # crude but effective: does the question reference this alarm's code
-        # or its readable keywords (e.g. "air pressure" for AL017_LOW_AIR_PRESSURE)?
         readable = a.alarm_code.replace("_", " ").lower()
-        keywords = [w for w in readable.split() if len(w) > 3]
+        keywords = [w for w in readable.split() if len(w) >= 3]
 
         if a.alarm_code.lower() in question.lower() or any(w in question.lower() for w in keywords):
             mentioned_code = a.alarm_code
