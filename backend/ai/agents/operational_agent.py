@@ -52,50 +52,6 @@ def gather_operational_data(machine):
     return "\n".join(gathered_data)
 
 
-def diagnose_alarm(machine, alarm_code):
-
-    """
-        Combine structured alarm data with the manual.
-    """
-
-    # Use the alarm code's readable part as the search query into the manual.
-    query = alarm_code.replace("_", " ")
-
-    chunks = retrive_chunks(machine, query, top_k=4)
-
-    manual_context = "\n\n".join(
-        f"[Page {c.page_num}] {c.content}" for c in chunks
-    )
-
-    system_prompt = (
-        "You are a troubleshooting assistant for AROL capping machines. "
-        "Given an alarm code and manual excerpts, explain the likely cause and "
-        "the remedy steps. Use ONLY the manual excerpts. Cite page numbers. "
-        "If the manual doesn't cover it, say so."
-    )
-
-    user_prompt = (
-        f"Machine: {machine.serial_number}\n"
-        f"Alarm code: {alarm_code}\n\n"
-        f"Manual excerpts:\n{manual_context}\n\n"
-        f"Explain the cause and remedy for this alarm."
-    )
-
-    response = ollama.chat(
-        model=CHAT_MODEL,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        think=False,
-    )
-
-    return {
-        "answer": response["message"]["content"],
-        "sources": [{"page": c.page_num, "file": c.source_file} for c in chunks],
-    }
-
-
 def answer_operational(machine, question):
 
     """
