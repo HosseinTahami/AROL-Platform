@@ -14,14 +14,33 @@ JUDGE_MODEL = "qwen3.5:9b"
 
 
 def load_benchmark(path):
-    """Read a benchmark JSON file and return its list of test cases."""
+    """
+        Read a benchmark JSON file and return its list of test cases.
+    """
     text = Path(path).read_text()
     cases = json.loads(text)
     return cases
 
 
 def run_orchestrator(user, machine, question):
-    """Run one question through the real, live orchestrator graph."""
+
+    """
+        Run one question through the real, live orchestrator graph.
+
+        class OrchestratorState(TypedDict):
+            question: str
+            history: list
+            user_id: int
+            machine_id: str
+            refused: bool
+            refusal_reason: str
+            agents_to_call: list
+            agent_results: dict
+            final_answer: str
+            trace: list
+
+        Creating a graph STATE
+    """
     machine_id = machine.machine_id if machine else ""
     starting_state = {
         "question": question,
@@ -38,14 +57,12 @@ def run_orchestrator(user, machine, question):
 
 
 def judge(question, answer, reference):
+
     """
-    LLM-as-judge: score a generated answer against a known-true reference.
-      5 = fully correct and faithful
-      3 = partially correct or missing key information
-      1 = incorrect or contains unsupported facts
-    Returns (score, reason). score is None if the judge's reply could not
-    be parsed as valid JSON.
+        LLM as judge: 
+            score a generated answer against a known-true reference.
     """
+
     system_prompt = """You are grading an AI assistant's answer for correctness and faithfulness against a REFERENCE (ground truth). Score 1-5:
 5 = fully correct and faithful, no invented facts
 3 = partially correct or missing key information
@@ -78,7 +95,11 @@ Respond with ONLY JSON: {"score": <1-5>, "reason": "<one sentence>"}"""
 # ---------------------------------------------------------------- #
 
 def eval_routing(path):
-    """For each question, does the planner's choice include the expected agent?"""
+
+    """
+        For each question, does the planner's choice include the expected agent?
+    """
+
     cases = load_benchmark(path)
 
     total_correct = 0
@@ -116,8 +137,11 @@ def eval_routing(path):
 
 
 def eval_multi_agent(path):
-    """For cross-domain questions, does the planner select every REQUIRED
-    specialist? (Picking an extra, reasonable specialist is not penalized.)"""
+    """
+        For cross domain questions (questions which need more than one agent),
+        does the planner select every "Required" specialist?
+    """
+    
     cases = load_benchmark(path)
 
     results = []
@@ -144,8 +168,12 @@ def eval_multi_agent(path):
 # ---------------------------------------------------------------- #
 
 def eval_rag_retrieval(path, k):
-    """For each question, is the manual chunk it was generated from
-    actually retrieved in the top k search results?"""
+
+    """
+        For each question, is the manual chunk it was generated from
+        actually retrieved in the top k search results?
+    """
+
     cases = load_benchmark(path)
 
     hits = 0
@@ -178,12 +206,16 @@ def eval_rag_retrieval(path, k):
 
 
 def eval_answer_quality(path):
-    """Run each question through the REAL orchestrator, then have the
-    judge score the real answer against a database-derived reference fact."""
+
+    """
+        Run each question through the orchestrator (graph.py), then have the
+        judge score the real answer against a database derived reference fact.
+    """
+
     cases = load_benchmark(path)
 
-    # All answer-quality questions are about company CMP-001, so the test
-    # user must belong to that same company (see documentation for why).
+    # All answer quality questions are about company CMP-001, so the test
+    # user must belong to that same company
     test_user = User.objects.filter(
         visibility="full", company__company_id="CMP-001"
     ).first()
