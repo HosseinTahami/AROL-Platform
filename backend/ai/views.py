@@ -6,7 +6,7 @@ from core.models import Conversation, Message
 
 
 from ai.orchestrator.graph import graph as orchestrator_graph
-
+from ai.logging_setup import orchestrator_logger
 
 class ChatView(APIView):
     def post(self, request):
@@ -49,6 +49,12 @@ class ChatView(APIView):
             "final_answer": "",
             "trace": [],
         })
+
+        orchestrator_logger.info(
+            f"user={request.user.id} machine={machine_id} question={question!r} "
+            f"refused={result['refused']} agents={result['agents_to_call']} "
+            f"trace={result['trace']}"
+        )
 
         answer_text = result["refusal_reason"] if result["refused"] else result["final_answer"]
         Message.objects.create(conversation=conversation, role="assistant", text=answer_text)
