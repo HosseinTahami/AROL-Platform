@@ -8,6 +8,160 @@ function machineFromUrl() {
   return params.get("machine");
 }
 
+function parseTraceStates(trace) {
+  const state = {
+    scope: null,        // "ok" | "refused"
+    plannerAgents: [],
+    visibility: null,    // "ok" | "refused"
+    agentsRan: [],
+    synthesis: null,     // "passthrough" | "combined" | null
+    refusedAt: null,
+  };
+
+  for (const step of trace || []) {
+    if (step.startsWith("scope_check")) {
+      state.scope = step.includes("refused") ? "refused" : "ok";
+      if (state.scope === "refused") state.refusedAt = "scope_check";
+    } else if (step.startsWith("planner")) {
+      const match = step.match(/\[(.*)\]/);
+      if (match) {
+        state.plannerAgents = match[1]
+          .split(",")
+          .map((s) => s.replace(/['"\s]/g, ""))
+          .filter(Boolean);
+      }
+    } else if (step.startsWith("visibility_check")) {
+      state.visibility = step.includes("refused") ? "refused" : "ok";
+      if (state.visibility === "refused") state.refusedAt = "visibility_check";
+    } else if (step.startsWith("agents ran")) {
+      const match = step.match(/\[(.*)\]/);
+      if (match) {
+        state.agentsRan = match[1]
+          .split(",")
+          .map((s) => s.replace(/['"\s]/g, ""))
+          .filter(Boolean);
+      }
+    } else if (step.startsWith("synthesizer")) {
+      state.synthesis = step.includes("passthrough") ? "passthrough" : "combined";
+    }
+  }
+  return state;
+}
+
+const AGENT_COLORS = {
+  manuals: { fill: "#CECBF6", stroke: "#3C3489", text: "#26215C" },
+  operational: { fill: "#9FE1CB", stroke: "#0F6E56", text: "#04342C" },
+  commercial: { fill: "#FAC775", stroke: "#854F0B", text: "#412402" },
+  diagnosis: { fill: "#F0997B", stroke: "#712B13", text: "#4A1B0C" },
+};
+
+function FlowDiagram({ trace }) {
+  const s = parseTraceStates(trace);
+
+  const wallStyle = (status) => {
+    if (status === "refused") return { fill: "#F7C1C1", stroke: "#A32D2D", text: "#501313" };
+    if (status === "ok") return { fill: "#B5D4F4", stroke: "#185FA5", text: "#042C53" };
+    return { fill: "#EFEFEF", stroke: "#B4B2A9", text: "#888780" };
+  };
+
+  const scopeStyle = wallStyle(s.scope);
+  const visStyle = wallStyle(s.visibility);
+  const agentList = s.agentsRan.length ? s.agentsRan : s.plannerAgents;
+
+  return (
+    <svg width="100%" viewBox="0 0 520 280" style={{ maxWidth: 500 }}>
+      <defs>
+        <marker id="fd-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#999" strokeWidth="1.5" />
+        </marker>
+      </defs>
+
+      {/* scope_check */}
+      <rect x="10" y="10" width="150" height="56" rx="8" fill={scopeStyle.fill} stroke={scopeStyle.stroke} strokeWidth="1.5" />
+      <text x="85" y="32" textAnchor="middle" fontSize="12" fontWeight="700" fill={scopeStyle.text}>scope check</text>
+      <text x="85" y="48" textAnchor="middle" fontSize="10" fill={scopeStyle.text}>
+        {s.scope === "refused" ? "wrong company" : s.scope === "ok" ? "company ok" : "company wall"}
+      </text>
+
+      <line x1="160" y1="38" x2="180" y2="38" stroke="#999" strokeWidth="1" markerEnd="url(#fd-arrow)" />
+
+      {/* planner */}
+      <rect x="180" y="10" width="150" height="56" rx="8" fill="#F4C0D1" stroke="#993556" strokeWidth="1.5" />
+      <text x="255" y="32" textAnchor="middle" fontSize="12" fontWeight="700" fill="#4B1528">planner</text>
+      <text x="255" y="48" textAnchor="middle" fontSize="9" fill="#4B1528">
+        {s.plannerAgents.length ? s.plannerAgents.join(", ") : "-"}
+      </text>
+
+      <line x1="330" y1="38" x2="350" y2="38" stroke="#999" strokeWidth="1" markerEnd="url(#fd-arrow)" />
+
+      {/* visibility_check */}
+      <rect x="350" y="10" width="150" height="56" rx="8" fill={visStyle.fill} stroke={visStyle.stroke} strokeWidth="1.5" />
+      <text x="425" y="32" textAnchor="middle" fontSize="12" fontWeight="700" fill={visStyle.text}>visibility check</text>
+      <text x="425" y="48" textAnchor="middle" fontSize="10" fill={visStyle.text}>
+        {s.visibility === "refused" ? "role blocked" : s.visibility === "ok" ? "role ok" : "role wall"}
+      </text>
+
+      <line x1="425" y1="66" x2="425" y2="100" stroke="#999" strokeWidth="1" markerEnd="url(#fd-arrow)" />
+
+      {/* agents run, one box per agent that actually ran */}
+      <text x="425" y="112" textAnchor="middle" fontSize="10" fontWeight="600" fill="#666">agents run</text>
+      {agentList.map((agent, i) => {
+        const c = AGENT_COLORS[agent] || { fill: "#EFEFEF", stroke: "#B4B2A9", text: "#666" };
+        const y = 120 + i * 40;
+        return (
+          <g key={agent}>
+            <rect x="350" y={y} width="150" height="32" rx="6" fill={c.fill} stroke={c.stroke} strokeWidth="1.5" />
+            <text x="425" y={y + 20} textAnchor="middle" fontSize="11" fontWeight="700" fill={c.text}>
+              {agent}
+            </text>
+          </g>
+        );
+      })}
+
+      {agentList.length > 0 && (
+        <>
+          <line x1="350" y1={120 + (agentList.length - 1) * 40 + 16} x2="330" y2={120 + (agentList.length - 1) * 40 + 16} stroke="#999" strokeWidth="1" markerEnd="url(#fd-arrow)" />
+
+          {/* synthesizer */}
+          <rect x="180" y={120 + (agentList.length - 1) * 40} width="150" height="32" rx="6"
+                fill="#97C459" stroke="#3B6D11" strokeWidth="1.5" />
+          <text x="255" y={120 + (agentList.length - 1) * 40 + 20} textAnchor="middle" fontSize="11" fontWeight="700" fill="#173404">
+            {s.synthesis === "passthrough" ? "passthrough" : s.synthesis === "combined" ? "combined" : "synthesizer"}
+          </text>
+        </>
+      )}
+
+      {s.refusedAt && (
+        <text x="260" y="260" textAnchor="middle" fontSize="11" fill="#A32D2D" fontWeight="700">
+          request refused at {s.refusedAt.replace("_", " ")}
+        </text>
+      )}
+    </svg>
+  );
+}
+
+function TraceView({ trace }) {
+  const [open, setOpen] = useState(false);
+  if (!trace || trace.length === 0) return null;
+
+  return (
+    <div className="mt-2">
+      <button
+        className="btn btn-sm btn-outline-secondary py-0 px-2"
+        style={{ fontSize: "0.75rem" }}
+        onClick={() => setOpen((o) => !o)}
+      >
+        {open ? "Hide" : "Show"} request flow
+      </button>
+      {open && (
+        <div className="mt-2 p-2 rounded-3">
+          <FlowDiagram trace={trace} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 function App() {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
   const [username, setUsername] = useState("");
@@ -259,6 +413,7 @@ function App() {
                             📄 Sources: {m.sources.map((s) => `p.${s.page}`).join(", ")}
                           </p>
                         )}
+                        <TraceView trace={m.trace} />
                       </div>
                     </div>
                   </div>
